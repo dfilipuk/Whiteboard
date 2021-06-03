@@ -1,9 +1,14 @@
 {
 	"name": "Whiteboard Client",
-	"dockerComposeFile": "../.devcontainer/docker-compose.yml",
-	"service": "dev-client",
+	"image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:16",
 	"workspaceFolder": "/dev-client",
-	"shutdownAction": "none",
+	"postCreateCommand": "cd source && npm i",
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/dev-client,type=bind,consistency=cached"
+	],
+	"containerEnv": {
+		"CHOKIDAR_USEPOLLING": "true"
+	},
 	"extensions": [
 		"ms-vscode.vscode-typescript-tslint-plugin"
 	],

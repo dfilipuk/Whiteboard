@@ -1,9 +1,10 @@
 {
 	"name": "Whiteboard Server",
-	"dockerComposeFile": "../.devcontainer/docker-compose.yml",
-	"service": "dev-server",
+	"image": "mcr.microsoft.com/vscode/devcontainers/dotnet:0-5.0",
 	"workspaceFolder": "/dev-server",
-	"shutdownAction": "none",
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/dev-server,type=bind,consistency=cached"
+	],	
 	"extensions": [
 		"ms-dotnettools.csharp"
 	],
