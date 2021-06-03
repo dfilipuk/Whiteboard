@@ -1,0 +1,11 @@
+{
+	"name": "Whiteboard Server",
+	"image": "mcr.microsoft.com/vscode/devcontainers/dotnet:0-5.0",
+	"workspaceFolder": "/dev-server",
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/dev-server,type=bind,consistency=cached"
+	],	
+	"extensions": [
+		"ms-dotnettools.csharp"
+	],
+}
