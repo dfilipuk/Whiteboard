@@ -1,0 +1,10 @@
+{
+	"name": "Whiteboard Client",
+	"dockerComposeFile": "../.devcontainer/docker-compose.yml",
+	"service": "dev-client",
+	"workspaceFolder": "/dev-client",
+	"shutdownAction": "none",
+	"extensions": [
+		"ms-vscode.vscode-typescript-tslint-plugin"
+	],
+}

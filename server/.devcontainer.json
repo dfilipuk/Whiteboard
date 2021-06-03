@@ -1,0 +1,10 @@
+{
+	"name": "Whiteboard Server",
+	"dockerComposeFile": "../.devcontainer/docker-compose.yml",
+	"service": "dev-server",
+	"workspaceFolder": "/dev-server",
+	"shutdownAction": "none",
+	"extensions": [
+		"ms-dotnettools.csharp"
+	],
+}

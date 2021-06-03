@@ -1,0 +1,20 @@
+version: "3.9"
+
+services: 
+  dev-client:
+    container_name: whiteboard-dev-client
+    image: mcr.microsoft.com/vscode/devcontainers/typescript-node:16
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    volumes: 
+      - ../client:/dev-client
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on: 
+      - dev-server
+
+  dev-server:
+    container_name: whiteboard-dev-server
+    image: mcr.microsoft.com/vscode/devcontainers/dotnet:0-5.0
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    volumes:
+      - ../server:/dev-server
