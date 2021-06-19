@@ -1,0 +1,11 @@
+.whiteboard {
+  grid-area: 1 / 2 / 1 / 2;
+  margin: 0.7em;
+  border-radius: 0.5em;
+  box-shadow: 0 0 1em 0.2em gray;
+  display: flex;
+}
+
+.whiteboard .whiteboard__canvas {
+  flex-grow: 1;
+}
