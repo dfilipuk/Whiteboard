@@ -7,6 +7,7 @@
 		"source=${localWorkspaceFolder},target=/dev-client,type=bind,consistency=cached"
 	],
 	"containerEnv": {
+    "FAST_REFRESH": "true",
 		"CHOKIDAR_USEPOLLING": "true"
 	},
 	"extensions": [
