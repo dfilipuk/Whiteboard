@@ -35,37 +35,41 @@ export function Whiteboard() {
       <canvas
         ref={canvas}
         className="whiteboard__canvas"
-        onMouseDown={startDrawing}
-        onMouseMove={continueDrawing}
-        onMouseUp={stopDrawing}
-        onMouseLeave={stopDrawing}
+        onMouseDown={e => startDrawing(new Point(e.clientX, e.clientY))}
+        onMouseMove={e => continueDrawing(new Point(e.clientX, e.clientY))}
+        onMouseUp={e => stopDrawing(new Point(e.clientX, e.clientY))}
+        onMouseOut={e => stopDrawing(new Point(e.clientX, e.clientY))}
+        onTouchStart={e => startDrawing(new Point(e.touches[0].clientX, e.touches[0].clientY))}
+        onTouchMove={e => continueDrawing(new Point(e.touches[0].clientX, e.touches[0].clientY))}
+        onTouchEnd={e => stopDrawing(new Point(e.touches[0].clientX, e.touches[0].clientY))}
+        onTouchCancel={e => stopDrawing(new Point(e.touches[0].clientX, e.touches[0].clientY))}
       />
     </div>
   );
 }
 
-function startDrawing(e: React.MouseEvent) {
+function startDrawing(point: Point) {
   drawing = true;
-  currentPoint = fromClientToOffsetCoordinates(e.clientX, e.clientY);
+  currentPoint = fromClientToOffsetCoordinates(point);
 }
 
-function continueDrawing(e: React.MouseEvent) {
+function continueDrawing(point: Point) {
   if (!drawing) return;
-  const newPoint = fromClientToOffsetCoordinates(e.clientX, e.clientY);
+  const newPoint = fromClientToOffsetCoordinates(point);
   drawLine(currentPoint, newPoint);
   currentPoint = newPoint;
 }
 
-function stopDrawing(e: React.MouseEvent) {
+function stopDrawing(point: Point) {
   if (!drawing) return;
   drawing = false;
-  const newPoint = fromClientToOffsetCoordinates(e.clientX, e.clientY);
+  const newPoint = fromClientToOffsetCoordinates(point);
   drawLine(currentPoint, newPoint);
 }
 
-function fromClientToOffsetCoordinates(x: number, y: number): Point {
+function fromClientToOffsetCoordinates(point: Point): Point {
   let rect = canvas?.current?.getBoundingClientRect();
-  return new Point(x - (rect?.left ?? 0), y - (rect?.top ?? 0))
+  return new Point(point.x - (rect?.left ?? 0), point.y - (rect?.top ?? 0))
 }
 
 function drawLine(from: Point, to: Point){
