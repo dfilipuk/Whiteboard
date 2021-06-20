@@ -12,8 +12,9 @@ body {
 }
 
 #root {
-  /*  Calculate global font size based on viewport width
-      and specify all sizes in font size relative units (em).
+  /*  Calculate global font size based on viewport width.
+      Then all sizes should be specified in font size relative units (em).
+
       Font size = A + (B - A) * (VIEWPORT_WIDTH - 640) / (1920 - 640) [px], where
       A -- font size [px] for viewport width 640 px
       B -- font size [px] for viewport width 1920 px
