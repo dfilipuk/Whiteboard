@@ -1,23 +1,40 @@
 import './Sidebar.css'
+import { useState } from 'react';
 import { ColorPicker } from '../components/ColorPicker';
 import { SizePicker } from '../components/SizePicker';
 
+enum PopUp { PenColor, PenSize, BackgroundColor };
+
 export function Sidebar() {
+  const [currentPopUp, setCurrentPopUp] = useState<PopUp | null>(null);
+  const togglePopUp = (popup: PopUp) => currentPopUp === popup ? setCurrentPopUp(null) : setCurrentPopUp(popup);
+
   return (
     <div className="sidebar">
-      <i className="sidebar__button las la-pen" style={{gridArea: '1 / 1 / 1 / 1'}}></i>
-      <i className="sidebar__button las la-pencil-ruler" style={{gridArea: '2 / 1 / 2 / 1'}}></i>
-      <i className="sidebar__button las la-fill-drip" style={{gridArea: '3 / 1 / 3 / 1'}}></i>
-      <div style={{gridArea: '2 / 2 / 2 / 2', alignSelf: 'center'}}>
-        <div className="size-picker-popup">
-          <SizePicker />
+      <i className="sidebar__button sidebar__button--pen-color las la-pen" onClick={() => togglePopUp(PopUp.PenColor)}></i>
+      <i className="sidebar__button sidebar__button--pen-size las la-pencil-ruler" onClick={() => togglePopUp(PopUp.PenSize)}></i>
+      <i className="sidebar__button sidebar__button--background-color las la-fill-drip" onClick={() => togglePopUp(PopUp.BackgroundColor)}></i>
+      {currentPopUp === PopUp.PenColor &&
+        <div className="pen-color-popup">
+          <div className="pen-color-popup__content">
+            <ColorPicker />
+          </div>
         </div>
-      </div>
-      <div style={{gridArea: '3 / 2 / 3 / 2'}}>
-        <div className="color-picker-popup">
-          <ColorPicker />
+      }
+      {currentPopUp === PopUp.PenSize &&
+        <div className="pen-size-popup">
+          <div className="pen-size-popup__content">
+            <SizePicker />
+          </div>
         </div>
-      </div>
+      }
+      {currentPopUp === PopUp.BackgroundColor &&
+        <div className="background-color-popup">
+          <div className="background-color-popup__content">
+            <ColorPicker />
+          </div>
+        </div>
+      }
     </div>
   );
 }
