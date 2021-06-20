@@ -4,12 +4,12 @@
   display: grid;
   grid-template-rows: repeat(3, auto) 1fr;
   grid-template-columns: repeat(2, auto);
-  font-size: 3.5em;
+  font-size: 2.5em;
 }
 
 .sidebar .sidebar__button {
   cursor: pointer;
-  margin: 0.2em 0.2em 0 0.2em;
+  margin: 0.2em 0.15em 0 0.2em;
   background-color: #f0f0f0;
   border-radius: 0.2em;
 }
