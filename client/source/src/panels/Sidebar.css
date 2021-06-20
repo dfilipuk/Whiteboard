@@ -27,6 +27,7 @@
 }
 
 .pen-color-popup {
+  z-index: 1;
   grid-area: 1 / 2 / 1 / 2;
 }
 
@@ -36,6 +37,7 @@
 }
 
 .pen-size-popup {
+  z-index: 1;
   grid-area: 2 / 2 / 2 / 2;
   margin-top: 0.2em;
   display: flex;
@@ -53,6 +55,7 @@
 }
 
 .background-color-popup {
+  z-index: 1;
   grid-area: 3 / 2 / 3 / 2;
 }
 
