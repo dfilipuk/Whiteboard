@@ -21,6 +21,7 @@
             "type": "pwa-chrome",
             "request": "launch",
             "name": "Launch Chrome",
+            "timeout": 30000,
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}/source"
         }
