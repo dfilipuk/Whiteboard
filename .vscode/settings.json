@@ -1,10 +1,7 @@
 {
   "files.exclude": {
-      "**/bin": true,
-      "**/obj": true,
-      "**/node_modules": true,
-  },
-  "editor.tabSize": 2,
-  "editor.insertSpaces": true,
-  "editor.detectIndentation": false
+    "**/bin": true,
+    "**/obj": true,
+    "**/node_modules": true,
+  }
 }
