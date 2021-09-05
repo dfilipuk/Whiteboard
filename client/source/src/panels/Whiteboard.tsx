@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Point } from 'models';
-import { drawLine, fromClientToOffsetCoordinates, resizeCanvas, useWindowEvents } from 'utils';
+import { useWindowEvents } from 'services';
+import { drawLine, fromClientToOffsetCoordinates, resizeCanvas } from 'utils';
 
 import './Whiteboard.css';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { WindowEventsProvider } from 'utils';
+import { WindowEventsProvider } from 'services';
 
 import { Workspace } from './Workspace';
 
