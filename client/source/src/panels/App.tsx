@@ -1,7 +1,15 @@
-import { Workspace } from './Workspace'
+import React from 'react';
 
-export function App() {
+import { WindowEventsProvider } from 'services';
+
+import { Workspace } from './Workspace';
+
+const App: React.FC = () => {
   return (
-    <Workspace />
+    <WindowEventsProvider>
+      <Workspace />
+    </WindowEventsProvider>
   );
-}
+};
+
+export { App };
