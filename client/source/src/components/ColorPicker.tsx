@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ChromePicker, ColorResult, RGBColor } from 'react-color';
 
-export function ColorPicker() {
+const ColorPicker: React.FC = () => {
   const [color, setColor] = useState<RGBColor>({ r: 0, g: 0, b: 0, a: 1 });
   const handleChange = (c: ColorResult) => setColor(c.rgb);
 
@@ -9,7 +9,9 @@ export function ColorPicker() {
     <ChromePicker
       color={color}
       onChange={handleChange}
-      onChangeComplete={c => console.log(c.rgb)}
+      onChangeComplete={(c) => console.log(c.rgb)}
     />
   );
-}
+};
+
+export { ColorPicker };
