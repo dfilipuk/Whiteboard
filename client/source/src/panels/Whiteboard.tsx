@@ -1,93 +1,73 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+
+import { Point } from 'models';
+import { drawLine, fromClientToOffsetCoordinates, resizeCanvas, useWindowEvents } from 'utils';
 
 import './Whiteboard.css';
 
-class Point {
-  public x: number;
-
-  public y: number;
-
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
-let drawing = false;
-let currentPoint = new Point(0, 0);
-
-let canvas: React.RefObject<HTMLCanvasElement> | null = null;
-let context: CanvasRenderingContext2D | null | undefined = null;
-let whiteboard: React.RefObject<HTMLDivElement> | null = null;
-
-function fromClientToOffsetCoordinates(point: Point): Point {
-  let rect = canvas?.current?.getBoundingClientRect();
-  return new Point(point.x - (rect?.left ?? 0), point.y - (rect?.top ?? 0));
-}
-
-function drawLine(from: Point, to: Point) {
-  if (!context) return;
-
-  context.beginPath();
-  context.moveTo(from.x, from.y);
-  context.lineTo(to.x, to.y);
-  context.strokeStyle = 'black';
-  context.lineWidth = 2;
-  context.stroke();
-  context.closePath();
-}
-
-function startDrawing(point: Point) {
-  drawing = true;
-  currentPoint = fromClientToOffsetCoordinates(point);
-}
-
-function continueDrawing(point: Point) {
-  if (!drawing) return;
-  const newPoint = fromClientToOffsetCoordinates(point);
-  drawLine(currentPoint, newPoint);
-  currentPoint = newPoint;
-}
-
-function stopDrawing(point: Point) {
-  if (!drawing) return;
-  drawing = false;
-  const newPoint = fromClientToOffsetCoordinates(point);
-  drawLine(currentPoint, newPoint);
-}
-
-async function resizeCanvas() {
-  if (canvas?.current && whiteboard?.current) {
-    const image = context?.getImageData(0, 0, canvas.current.width, canvas.current.height);
-
-    canvas.current.width = whiteboard.current.clientWidth;
-    canvas.current.height = whiteboard.current.clientHeight;
-
-    if (image) {
-      const bitmap = await createImageBitmap(image);
-      if (image) {
-        context?.drawImage(bitmap, 0, 0);
-      }
-    }
-  }
-}
-
 const Whiteboard: React.FC = () => {
-  canvas = React.useRef<HTMLCanvasElement>(null);
-  whiteboard = React.useRef<HTMLDivElement>(null);
-  React.useEffect(() => {
-    context = canvas?.current?.getContext('2d');
-    if (canvas?.current && whiteboard?.current) {
-      window.addEventListener('resize', resizeCanvas, false);
-      resizeCanvas();
-    } else {
-      window.removeEventListener('resize', resizeCanvas);
+  const { resize } = useWindowEvents();
+
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  const [context, setContext] = useState<CanvasRenderingContext2D | null | undefined>(null);
+  const [whiteboard, setWhiteboard] = useState<HTMLDivElement | null>(null);
+
+  const drawing = useRef<boolean>(false);
+  const currentPoint = useRef<Point>(new Point(0, 0));
+
+  const setupCanvasNode = useCallback((node) => setCanvas(node), []);
+  const setupWhiteboardNode = useCallback((node) => setWhiteboard(node), []);
+
+  const startDrawing = useCallback(
+    (point: Point) => {
+      if (canvas) {
+        drawing.current = true;
+        currentPoint.current = fromClientToOffsetCoordinates(canvas, point);
+      }
+    },
+    [canvas]
+  );
+
+  const continueDrawing = useCallback(
+    (point: Point) => {
+      if (drawing.current && canvas && context) {
+        const newPoint = fromClientToOffsetCoordinates(canvas, point);
+        drawLine(context, currentPoint.current, newPoint);
+        currentPoint.current = newPoint;
+      }
+    },
+    [canvas, context]
+  );
+
+  const stopDrawing = useCallback(
+    (point: Point) => {
+      if (drawing.current && canvas && context) {
+        drawing.current = false;
+        const newPoint = fromClientToOffsetCoordinates(canvas, point);
+        drawLine(context, currentPoint.current, newPoint);
+      }
+    },
+    [canvas, context]
+  );
+
+  useEffect(() => {
+    if (resize && canvas && whiteboard && context) {
+      resizeCanvas(canvas, whiteboard, context);
     }
-  });
+  }, [resize, canvas, whiteboard, context]);
+
+  useEffect(() => {
+    if (canvas) {
+      setContext(canvas.getContext('2d'));
+    } else {
+      setContext(null);
+    }
+  }, [canvas]);
+
   return (
-    <div ref={whiteboard} className="whiteboard">
+    <div ref={setupWhiteboardNode} className="whiteboard">
       <canvas
-        ref={canvas}
+        ref={setupCanvasNode}
         className="whiteboard__canvas"
         onMouseDown={(e) => startDrawing(new Point(e.clientX, e.clientY))}
         onMouseMove={(e) => continueDrawing(new Point(e.clientX, e.clientY))}
