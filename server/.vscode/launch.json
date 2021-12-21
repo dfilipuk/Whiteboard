@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/source/Whiteboard.Server/bin/Debug/net5.0/Whiteboard.Server.dll",
+            "program": "${workspaceFolder}/source/Whiteboard.Server/bin/Debug/net6.0/Whiteboard.Server.dll",
             "args": [],
             "cwd": "${workspaceFolder}/source/Whiteboard.Server",
             "stopAtEntry": false,
