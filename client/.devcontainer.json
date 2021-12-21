@@ -1,17 +1,18 @@
 {
-	"name": "Whiteboard Client",
-	"image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:16",
-	"workspaceFolder": "/dev-client",
-	"postCreateCommand": "cd source && npm i",
-	"mounts": [
-		"source=${localWorkspaceFolder},target=/dev-client,type=bind,consistency=cached"
-	],
-	"containerEnv": {
-		"FAST_REFRESH": "true",
-		"CHOKIDAR_USEPOLLING": "true"
-	},
-	"extensions": [
-		"dbaeumer.vscode-eslint",
+  "name": "Whiteboard Client",
+  "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:16",
+  "workspaceFolder": "/whiteboard-client",
+  "postCreateCommand": "cd source && yarn",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/whiteboard-client,type=bind,consistency=cached",
+  "mounts": [
+    "source=whiteboard-client-node_modules,target=${containerWorkspaceFolder}/source/node_modules,type=volume"
+  ],
+  "containerEnv": {
+    "FAST_REFRESH": "true",
+    "CHOKIDAR_USEPOLLING": "true"
+  },
+  "extensions": [
+    "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode"
-	],
+  ],
 }
