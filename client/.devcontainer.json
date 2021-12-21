@@ -1,11 +1,11 @@
 {
   "name": "Whiteboard Client",
   "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:16",
-  "workspaceFolder": "/dev-client",
+  "workspaceFolder": "/whiteboard-client",
   "postCreateCommand": "cd source && yarn",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/dev-client,type=bind,consistency=cached",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/whiteboard-client,type=bind,consistency=cached",
   "mounts": [
-    "source=node_modules,target=${containerWorkspaceFolder}/source/node_modules,type=volume"
+    "source=whiteboard-client-node_modules,target=${containerWorkspaceFolder}/source/node_modules,type=volume"
   ],
   "containerEnv": {
     "FAST_REFRESH": "true",
