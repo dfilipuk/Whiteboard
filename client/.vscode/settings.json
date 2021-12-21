@@ -5,6 +5,5 @@
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "debug.javascript.autoAttachFilter": "smart",
   "eslint.workingDirectories": [{ "directory": "source" }]
 }
