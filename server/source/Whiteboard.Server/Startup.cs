@@ -24,10 +24,10 @@ namespace Whiteboard.Server
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecks("/status");
+                endpoints.MapHealthChecks("/api/health");
                 endpoints.MapGet("/{**path}", context =>
                 {
-                    context.Response.Redirect("/status");
+                    context.Response.Redirect("/api/health");
                     return Task.CompletedTask;
                 });
             });
