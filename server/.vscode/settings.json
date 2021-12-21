@@ -1,6 +1,9 @@
 {
-    "files.exclude": {
-        "**/bin": true,
-        "**/obj": true,
-    }
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true,
+  },
+  "[csharp]": {
+    "editor.tabSize": 4
+  }
 }
