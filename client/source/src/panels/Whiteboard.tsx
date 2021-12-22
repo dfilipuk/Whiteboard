@@ -21,13 +21,13 @@ const Whiteboard: React.FC = () => {
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null | undefined>(null);
-  const [whiteboard, setWhiteboard] = useState<HTMLDivElement | null>(null);
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
   const drawing = useRef<boolean>(false);
   const currentPoint = useRef<Point>(new Point(0, 0));
 
   const setupCanvasNode = useCallback((node) => setCanvas(node), []);
-  const setupWhiteboardNode = useCallback((node) => setWhiteboard(node), []);
+  const setupContainerNode = useCallback((node) => setContainer(node), []);
 
   const startDrawing = useCallback(
     (point: Point) => {
@@ -62,10 +62,10 @@ const Whiteboard: React.FC = () => {
   );
 
   useEffect(() => {
-    if (resize && canvas && whiteboard && context) {
-      resizeCanvas(canvas, whiteboard, context);
+    if (resize && canvas && container && context) {
+      resizeCanvas(canvas, container, context);
     }
-  }, [resize, canvas, whiteboard, context]);
+  }, [resize, canvas, container, context]);
 
   useEffect(() => {
     if (canvas) {
@@ -76,7 +76,7 @@ const Whiteboard: React.FC = () => {
   }, [canvas]);
 
   return (
-    <Container ref={setupWhiteboardNode}>
+    <Container ref={setupContainerNode}>
       <Canvas
         ref={setupCanvasNode}
         onMouseDown={(e) => startDrawing(new Point(e.clientX, e.clientY))}
