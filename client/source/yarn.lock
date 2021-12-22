@@ -4490,6 +4490,11 @@ eslint-plugin-jsx-a11y@^6.3.1:
     language-tags "^1.0.5"
     minimatch "^3.0.4"
 
+eslint-plugin-mobx@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-mobx/-/eslint-plugin-mobx-0.0.7.tgz#8c45655e170a5034d0f62722f061da4b5b2b43ae"
+  integrity sha512-UWFYEyW1/I6I4BoypEs7aohNWS2tRF2kNi2Gj9uMb1kC0H6hfonP0ZeBlg4qO+gBuxLAOkgFRJSe2aeaNZeX3A==
+
 eslint-plugin-prettier@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-4.0.0.tgz#8b99d1e4b8b24a762472b4567992023619cb98e0"

@@ -3,7 +3,13 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "extends": ["react-app", "airbnb-typescript", "prettier", "plugin:import/typescript"],
+  "extends": [
+    "react-app",
+    "airbnb-typescript",
+    "prettier",
+    "plugin:import/typescript",
+    "plugin:mobx/recommended"
+  ],
   "settings": {
     "import/resolver": {
       "node": {
@@ -11,7 +17,7 @@
       }
     }
   },
-  "plugins": ["import", "prettier", "react", "react-hooks"],
+  "plugins": ["import", "prettier", "react", "react-hooks", "mobx"],
   "rules": {
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
