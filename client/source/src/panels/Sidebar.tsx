@@ -60,7 +60,7 @@ type Props = {
 };
 
 const Sidebar: React.FC<Props> = observer(({ drawingSettings }) => {
-  const { penColor, backgroundColor } = drawingSettings;
+  const { penSize, penColor, backgroundColor } = drawingSettings;
 
   const [currentPopUp, setCurrentPopUp] = useState<PopUpKind | null>(null);
 
@@ -97,7 +97,7 @@ const Sidebar: React.FC<Props> = observer(({ drawingSettings }) => {
       )}
       {currentPopUp === PopUpKind.PenSize && (
         <PenSizePopUp position={2}>
-          <StyledSizePicker />
+          <StyledSizePicker size={penSize} />
         </PenSizePopUp>
       )}
       {currentPopUp === PopUpKind.BackgroundColor && (

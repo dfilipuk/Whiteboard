@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { DEFAULT_PEN_COLOR } from 'constants/drawing';
-import { Color, DrawingSettings } from 'stores';
+import { DEFAULT_PEN_COLOR, DEFAULT_PEN_SIZE } from 'constants/drawing';
+import { Color, DrawingSettings, Size } from 'stores';
 
 import { Sidebar } from './Sidebar';
 import { Whiteboard } from './Whiteboard';
@@ -18,7 +18,7 @@ type Props = {
 
 const Workspace: React.FC<Props> = ({ backgroundColor }) => {
   const [settings] = useState<DrawingSettings>(
-    new DrawingSettings(new Color(DEFAULT_PEN_COLOR), backgroundColor)
+    new DrawingSettings(new Size(DEFAULT_PEN_SIZE), new Color(DEFAULT_PEN_COLOR), backgroundColor)
   );
 
   return (

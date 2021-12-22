@@ -24,7 +24,7 @@ type Props = {
 };
 
 const Whiteboard: React.FC<Props> = observer(({ drawingSettings }) => {
-  const { penColor, backgroundColor } = drawingSettings;
+  const { penSize, penColor, backgroundColor } = drawingSettings;
 
   const { resize } = useWindowEvents();
 
@@ -52,11 +52,11 @@ const Whiteboard: React.FC<Props> = observer(({ drawingSettings }) => {
     (point: Point) => {
       if (drawing.current && canvas && context) {
         const newPoint = fromClientToOffsetCoordinates(canvas, point);
-        drawLine(context, currentPoint.current, newPoint, penColor.value);
+        drawLine(context, currentPoint.current, newPoint, penColor.value, penSize.value);
         currentPoint.current = newPoint;
       }
     },
-    [canvas, context, penColor.value]
+    [canvas, context, penColor.value, penSize.value]
   );
 
   const stopDrawing = useCallback(
@@ -64,10 +64,10 @@ const Whiteboard: React.FC<Props> = observer(({ drawingSettings }) => {
       if (drawing.current && canvas && context) {
         drawing.current = false;
         const newPoint = fromClientToOffsetCoordinates(canvas, point);
-        drawLine(context, currentPoint.current, newPoint, penColor.value);
+        drawLine(context, currentPoint.current, newPoint, penColor.value, penSize.value);
       }
     },
-    [canvas, context, penColor.value]
+    [canvas, context, penColor.value, penSize.value]
   );
 
   useEffect(() => {
