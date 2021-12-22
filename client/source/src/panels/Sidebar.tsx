@@ -60,7 +60,7 @@ type Props = {
 };
 
 const Sidebar: React.FC<Props> = observer(({ drawingSettings }) => {
-  const { backgroundColor } = drawingSettings;
+  const { penColor, backgroundColor } = drawingSettings;
 
   const [currentPopUp, setCurrentPopUp] = useState<PopUpKind | null>(null);
 
@@ -71,9 +71,15 @@ const Sidebar: React.FC<Props> = observer(({ drawingSettings }) => {
 
   return (
     <Container>
-      <Button position={1} className="las la-pen" onClick={() => togglePopUp(PopUpKind.PenColor)} />
+      <Button
+        position={1}
+        color={penColor.value}
+        className="las la-pen"
+        onClick={() => togglePopUp(PopUpKind.PenColor)}
+      />
       <Button
         position={2}
+        color={penColor.value}
         className="las la-pencil-ruler"
         onClick={() => togglePopUp(PopUpKind.PenSize)}
       />
@@ -84,11 +90,11 @@ const Sidebar: React.FC<Props> = observer(({ drawingSettings }) => {
         onClick={() => togglePopUp(PopUpKind.BackgroundColor)}
       />
 
-      {/* {currentPopUp === PopUpKind.PenColor && (
+      {currentPopUp === PopUpKind.PenColor && (
         <PopUp position={1}>
-          <StyledColorPicker />
+          <StyledColorPicker color={penColor} />
         </PopUp>
-      )} */}
+      )}
       {currentPopUp === PopUpKind.PenSize && (
         <PenSizePopUp position={2}>
           <StyledSizePicker />

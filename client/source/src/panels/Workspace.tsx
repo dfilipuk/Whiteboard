@@ -16,7 +16,9 @@ type Props = {
 };
 
 const Workspace: React.FC<Props> = ({ backgroundColor }) => {
-  const [settings] = useState<DrawingSettings>(new DrawingSettings(backgroundColor));
+  const [settings] = useState<DrawingSettings>(
+    new DrawingSettings(new Color('black'), backgroundColor)
+  );
 
   return (
     <Container>
