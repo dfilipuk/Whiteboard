@@ -1,10 +1,20 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 import { Point } from 'models';
 import { useWindowEvents } from 'services';
 import { drawLine, fromClientToOffsetCoordinates, resizeCanvas } from 'utils';
 
-import './Whiteboard.css';
+const Container = styled.div`
+  grid-area: 1 / 2 / 1 / 2;
+  margin: 0.5em;
+  border-radius: 0.3em;
+  box-shadow: 0 0 1em 0.2em gray;
+`;
+
+const Canvas = styled.canvas`
+  position: absolute;
+`;
 
 const Whiteboard: React.FC = () => {
   const { resize } = useWindowEvents();
@@ -66,10 +76,9 @@ const Whiteboard: React.FC = () => {
   }, [canvas]);
 
   return (
-    <div ref={setupWhiteboardNode} className="whiteboard">
-      <canvas
+    <Container ref={setupWhiteboardNode}>
+      <Canvas
         ref={setupCanvasNode}
-        className="whiteboard__canvas"
         onMouseDown={(e) => startDrawing(new Point(e.clientX, e.clientY))}
         onMouseMove={(e) => continueDrawing(new Point(e.clientX, e.clientY))}
         onMouseUp={(e) => stopDrawing(new Point(e.clientX, e.clientY))}
@@ -79,7 +88,7 @@ const Whiteboard: React.FC = () => {
         onTouchEnd={(e) => stopDrawing(new Point(e.touches[0].clientX, e.touches[0].clientY))}
         onTouchCancel={(e) => stopDrawing(new Point(e.touches[0].clientX, e.touches[0].clientY))}
       />
-    </div>
+    </Container>
   );
 };
 

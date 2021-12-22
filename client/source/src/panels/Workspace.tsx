@@ -1,16 +1,20 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import { Sidebar } from './Sidebar';
 import { Whiteboard } from './Whiteboard';
 
-import './Workspace.css';
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr;
+`;
 
 const Workspace: React.FC = () => {
   return (
-    <div className="workspace">
+    <Container>
       <Sidebar />
       <Whiteboard />
-    </div>
+    </Container>
   );
 };
 
