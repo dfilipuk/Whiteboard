@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { GlobalDrawingSettings } from 'stores';
+
 import { Sidebar } from './Sidebar';
 import { Whiteboard } from './Whiteboard';
 
@@ -9,11 +11,15 @@ const Container = styled.div`
   grid-template-columns: auto 1fr;
 `;
 
-const Workspace: React.FC = () => {
+type Props = {
+  settings: GlobalDrawingSettings;
+};
+
+const Workspace: React.FC<Props> = ({ settings }) => {
   return (
     <Container>
-      <Sidebar />
-      <Whiteboard />
+      <Sidebar settings={settings} />
+      <Whiteboard settings={settings} />
     </Container>
   );
 };

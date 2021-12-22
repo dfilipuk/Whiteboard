@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
 import { ColorPicker, SizePicker } from 'components';
+import { GlobalDrawingSettings } from 'stores';
 
 const Container = styled.div`
   grid-area: 1 / 1 / 1 / 1;
@@ -12,13 +14,14 @@ const Container = styled.div`
   font-size: 2.5em;
 `;
 
-const Button = styled.i<{ position: number }>`
+const Button = styled.i<{ position: number; color?: string }>`
   cursor: pointer;
   margin: 0.2em 0.15em 0 0.2em;
-  background-color: #f0f0f0;
+  background-color: #dadada;
   border-radius: 0.2em;
   grid-column: 1 / span 1;
   grid-row: ${(props) => props.position} / span 1;
+  color: ${(props) => props.color};
 `;
 
 const PopUp = styled.div<{ position: number }>`
@@ -52,7 +55,11 @@ enum PopUpKind {
   BackgroundColor,
 }
 
-const Sidebar: React.FC = () => {
+type Props = {
+  settings: GlobalDrawingSettings;
+};
+
+const Sidebar: React.FC<Props> = observer(({ settings }) => {
   const [currentPopUp, setCurrentPopUp] = useState<PopUpKind | null>(null);
 
   const togglePopUp = useCallback(
@@ -70,15 +77,16 @@ const Sidebar: React.FC = () => {
       />
       <Button
         position={3}
+        color={settings.backgroundColor.value}
         className="las la-fill-drip"
         onClick={() => togglePopUp(PopUpKind.BackgroundColor)}
       />
 
-      {currentPopUp === PopUpKind.PenColor && (
+      {/* {currentPopUp === PopUpKind.PenColor && (
         <PopUp position={1}>
           <StyledColorPicker />
         </PopUp>
-      )}
+      )} */}
       {currentPopUp === PopUpKind.PenSize && (
         <PenSizePopUp position={2}>
           <StyledSizePicker />
@@ -86,11 +94,11 @@ const Sidebar: React.FC = () => {
       )}
       {currentPopUp === PopUpKind.BackgroundColor && (
         <PopUp position={3}>
-          <StyledColorPicker />
+          <StyledColorPicker color={settings.backgroundColor} />
         </PopUp>
       )}
     </Container>
   );
-};
+});
 
 export { Sidebar };

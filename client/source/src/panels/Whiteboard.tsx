@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
 import { Point } from 'models';
 import { useWindowEvents } from 'services';
+import { GlobalDrawingSettings } from 'stores';
 import { drawLine, fromClientToOffsetCoordinates, resizeCanvas } from 'utils';
 
 const Container = styled.div`
@@ -12,11 +14,16 @@ const Container = styled.div`
   box-shadow: 0 0 1em 0.2em gray;
 `;
 
-const Canvas = styled.canvas`
+const Canvas = styled.canvas<{ backgroundColor: string }>`
   position: absolute;
+  background-color: ${(props) => props.backgroundColor};
 `;
 
-const Whiteboard: React.FC = () => {
+type Props = {
+  settings: GlobalDrawingSettings;
+};
+
+const Whiteboard: React.FC<Props> = observer(({ settings }) => {
   const { resize } = useWindowEvents();
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
@@ -79,6 +86,7 @@ const Whiteboard: React.FC = () => {
     <Container ref={setupContainerNode}>
       <Canvas
         ref={setupCanvasNode}
+        backgroundColor={settings.backgroundColor.value}
         onMouseDown={(e) => startDrawing(new Point(e.clientX, e.clientY))}
         onMouseMove={(e) => continueDrawing(new Point(e.clientX, e.clientY))}
         onMouseUp={(e) => stopDrawing(new Point(e.clientX, e.clientY))}
@@ -90,6 +98,6 @@ const Whiteboard: React.FC = () => {
       />
     </Container>
   );
-};
+});
 
 export { Whiteboard };
