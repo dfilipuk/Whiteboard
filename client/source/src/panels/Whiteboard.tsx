@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Point } from 'models';
 import { useWindowEvents } from 'services';
-import { GlobalDrawingSettings } from 'stores';
+import { DrawingSettings } from 'stores';
 import { drawLine, fromClientToOffsetCoordinates, resizeCanvas } from 'utils';
 
 const Container = styled.div`
@@ -20,10 +20,12 @@ const Canvas = styled.canvas<{ backgroundColor: string }>`
 `;
 
 type Props = {
-  settings: GlobalDrawingSettings;
+  drawingSettings: DrawingSettings;
 };
 
-const Whiteboard: React.FC<Props> = observer(({ settings }) => {
+const Whiteboard: React.FC<Props> = observer(({ drawingSettings }) => {
+  const { backgroundColor } = drawingSettings;
+
   const { resize } = useWindowEvents();
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
@@ -86,7 +88,7 @@ const Whiteboard: React.FC<Props> = observer(({ settings }) => {
     <Container ref={setupContainerNode}>
       <Canvas
         ref={setupCanvasNode}
-        backgroundColor={settings.backgroundColor.value}
+        backgroundColor={backgroundColor.value}
         onMouseDown={(e) => startDrawing(new Point(e.clientX, e.clientY))}
         onMouseMove={(e) => continueDrawing(new Point(e.clientX, e.clientY))}
         onMouseUp={(e) => stopDrawing(new Point(e.clientX, e.clientY))}

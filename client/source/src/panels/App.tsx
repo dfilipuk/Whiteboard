@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 
 import { WindowEventsProvider } from 'services';
-import { GlobalDrawingSettings } from 'stores';
+import { Color } from 'stores';
 
 import { Workspace } from './Workspace';
 
 const App: React.FC = () => {
-  const [globalDrawingSettings] = useState<GlobalDrawingSettings>(
-    () => new GlobalDrawingSettings('white')
-  );
+  const [color] = useState<Color>(new Color('white'));
 
   return (
     <WindowEventsProvider>
-      <Workspace settings={globalDrawingSettings} />
+      <Workspace backgroundColor={color} />
     </WindowEventsProvider>
   );
 };

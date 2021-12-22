@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
 import { ColorPicker, SizePicker } from 'components';
-import { GlobalDrawingSettings } from 'stores';
+import { DrawingSettings } from 'stores';
 
 const Container = styled.div`
   grid-area: 1 / 1 / 1 / 1;
@@ -56,10 +56,12 @@ enum PopUpKind {
 }
 
 type Props = {
-  settings: GlobalDrawingSettings;
+  drawingSettings: DrawingSettings;
 };
 
-const Sidebar: React.FC<Props> = observer(({ settings }) => {
+const Sidebar: React.FC<Props> = observer(({ drawingSettings }) => {
+  const { backgroundColor } = drawingSettings;
+
   const [currentPopUp, setCurrentPopUp] = useState<PopUpKind | null>(null);
 
   const togglePopUp = useCallback(
@@ -77,7 +79,7 @@ const Sidebar: React.FC<Props> = observer(({ settings }) => {
       />
       <Button
         position={3}
-        color={settings.backgroundColor.value}
+        color={backgroundColor.value}
         className="las la-fill-drip"
         onClick={() => togglePopUp(PopUpKind.BackgroundColor)}
       />
@@ -94,7 +96,7 @@ const Sidebar: React.FC<Props> = observer(({ settings }) => {
       )}
       {currentPopUp === PopUpKind.BackgroundColor && (
         <PopUp position={3}>
-          <StyledColorPicker color={settings.backgroundColor} />
+          <StyledColorPicker color={backgroundColor} />
         </PopUp>
       )}
     </Container>

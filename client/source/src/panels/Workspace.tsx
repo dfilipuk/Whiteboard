@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { GlobalDrawingSettings } from 'stores';
+import { Color, DrawingSettings } from 'stores';
 
 import { Sidebar } from './Sidebar';
 import { Whiteboard } from './Whiteboard';
@@ -12,14 +12,16 @@ const Container = styled.div`
 `;
 
 type Props = {
-  settings: GlobalDrawingSettings;
+  backgroundColor: Color;
 };
 
-const Workspace: React.FC<Props> = ({ settings }) => {
+const Workspace: React.FC<Props> = ({ backgroundColor }) => {
+  const [settings] = useState<DrawingSettings>(new DrawingSettings(backgroundColor));
+
   return (
     <Container>
-      <Sidebar settings={settings} />
-      <Whiteboard settings={settings} />
+      <Sidebar drawingSettings={settings} />
+      <Whiteboard drawingSettings={settings} />
     </Container>
   );
 };

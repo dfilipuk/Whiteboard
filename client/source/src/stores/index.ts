@@ -1,2 +1,2 @@
 export { Color } from './color';
-export { GlobalDrawingSettings } from './globalDrawingSettings';
+export { DrawingSettings } from './drawingSettings';
