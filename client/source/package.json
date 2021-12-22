@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "mobx": "^6.3.9",
+    "mobx-react-lite": "^3.2.2",
     "rc-slider": "^9.7.2",
     "react": "^17.0.2",
     "react-color": "^2.19.3",
