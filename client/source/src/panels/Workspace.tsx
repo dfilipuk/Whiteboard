@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import { DEFAULT_PEN_COLOR } from 'constants/drawing';
 import { Color, DrawingSettings } from 'stores';
 
 import { Sidebar } from './Sidebar';
@@ -17,7 +18,7 @@ type Props = {
 
 const Workspace: React.FC<Props> = ({ backgroundColor }) => {
   const [settings] = useState<DrawingSettings>(
-    new DrawingSettings(new Color('black'), backgroundColor)
+    new DrawingSettings(new Color(DEFAULT_PEN_COLOR), backgroundColor)
   );
 
   return (
