@@ -1,59 +1,95 @@
 import React, { useCallback, useState } from 'react';
+import styled from 'styled-components';
 
 import { ColorPicker, SizePicker } from 'components';
 
-import './Sidebar.css';
+const Container = styled.div`
+  grid-area: 1 / 1 / 1 / 1;
 
-enum PopUp {
+  display: grid;
+  grid-template-rows: repeat(3, auto) 1fr;
+  grid-template-columns: repeat(2, auto);
+  font-size: 2.5em;
+`;
+
+const Button = styled.i<{ position: number }>`
+  cursor: pointer;
+  margin: 0.2em 0.15em 0 0.2em;
+  background-color: #f0f0f0;
+  border-radius: 0.2em;
+  grid-column: 1 / span 1;
+  grid-row: ${(props) => props.position} / span 1;
+`;
+
+const PopUp = styled.div<{ position: number }>`
+  z-index: 1;
+  grid-column: 2 / span 1;
+  grid-row: ${(props) => props.position} / span 1;
+`;
+
+const PenSizePopUp = styled(PopUp)`
+  margin-top: 0.2em;
+  display: flex;
+  align-items: center;
+`;
+
+const StyledColorPicker = styled(ColorPicker)`
+  position: absolute;
+  margin: 0.2em 0 0 0.1em;
+`;
+
+const StyledSizePicker = styled(SizePicker)`
+  position: absolute;
+  margin-left: 0.1em;
+  width: 5em;
+  background-color: white;
+  box-shadow: 0 0 0.15em 0.01em gray;
+`;
+
+enum PopUpKind {
   PenColor,
   PenSize,
   BackgroundColor,
 }
 
 const Sidebar: React.FC = () => {
-  const [currentPopUp, setCurrentPopUp] = useState<PopUp | null>(null);
+  const [currentPopUp, setCurrentPopUp] = useState<PopUpKind | null>(null);
 
   const togglePopUp = useCallback(
-    (popup: PopUp) => setCurrentPopUp(currentPopUp === popup ? null : popup),
+    (popup: PopUpKind) => setCurrentPopUp(currentPopUp === popup ? null : popup),
     [currentPopUp]
   );
 
   return (
-    <div className="sidebar">
-      <i
-        className="sidebar__button sidebar__button--pen-color las la-pen"
-        onClick={() => togglePopUp(PopUp.PenColor)}
+    <Container>
+      <Button position={1} className="las la-pen" onClick={() => togglePopUp(PopUpKind.PenColor)} />
+      <Button
+        position={2}
+        className="las la-pencil-ruler"
+        onClick={() => togglePopUp(PopUpKind.PenSize)}
       />
-      <i
-        className="sidebar__button sidebar__button--pen-size las la-pencil-ruler"
-        onClick={() => togglePopUp(PopUp.PenSize)}
+      <Button
+        position={3}
+        className="las la-fill-drip"
+        onClick={() => togglePopUp(PopUpKind.BackgroundColor)}
       />
-      <i
-        className="sidebar__button sidebar__button--background-color las la-fill-drip"
-        onClick={() => togglePopUp(PopUp.BackgroundColor)}
-      />
-      {currentPopUp === PopUp.PenColor && (
-        <div className="pen-color-popup">
-          <div className="pen-color-popup__content">
-            <ColorPicker />
-          </div>
-        </div>
+
+      {currentPopUp === PopUpKind.PenColor && (
+        <PopUp position={1}>
+          <StyledColorPicker />
+        </PopUp>
       )}
-      {currentPopUp === PopUp.PenSize && (
-        <div className="pen-size-popup">
-          <div className="pen-size-popup__content">
-            <SizePicker />
-          </div>
-        </div>
+      {currentPopUp === PopUpKind.PenSize && (
+        <PenSizePopUp position={2}>
+          <StyledSizePicker />
+        </PenSizePopUp>
       )}
-      {currentPopUp === PopUp.BackgroundColor && (
-        <div className="background-color-popup">
-          <div className="background-color-popup__content">
-            <ColorPicker />
-          </div>
-        </div>
+      {currentPopUp === PopUpKind.BackgroundColor && (
+        <PopUp position={3}>
+          <StyledColorPicker />
+        </PopUp>
       )}
-    </div>
+    </Container>
   );
 };
 
