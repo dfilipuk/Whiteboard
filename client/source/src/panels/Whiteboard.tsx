@@ -14,9 +14,8 @@ const Container = styled.div`
   box-shadow: 0 0 1em 0.2em gray;
 `;
 
-const Canvas = styled.canvas<{ backgroundColor: string }>`
+const Canvas = styled.canvas`
   position: absolute;
-  background-color: ${(props) => props.backgroundColor};
 `;
 
 type Props = {
@@ -88,7 +87,7 @@ const Whiteboard: React.FC<Props> = observer(({ drawingSettings }) => {
     <Container ref={setupContainerNode}>
       <Canvas
         ref={setupCanvasNode}
-        backgroundColor={backgroundColor.value}
+        style={{ backgroundColor: backgroundColor.value }}
         onMouseDown={(e) => startDrawing(new Point(e.clientX, e.clientY))}
         onMouseMove={(e) => continueDrawing(new Point(e.clientX, e.clientY))}
         onMouseUp={(e) => stopDrawing(new Point(e.clientX, e.clientY))}

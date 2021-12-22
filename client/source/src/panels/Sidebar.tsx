@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
-import { ColorPicker, SizePicker } from 'components';
+import { Button, ColorPicker, SizePicker } from 'components';
 import { DrawingSettings } from 'stores';
 
 const Container = styled.div`
@@ -14,14 +14,10 @@ const Container = styled.div`
   font-size: 2.5em;
 `;
 
-const Button = styled.i<{ position: number; color?: string }>`
-  cursor: pointer;
+const StyledButton = styled(Button)<{ position: number }>`
   margin: 0.2em 0.15em 0 0.2em;
-  background-color: #dadada;
-  border-radius: 0.2em;
   grid-column: 1 / span 1;
   grid-row: ${(props) => props.position} / span 1;
-  color: ${(props) => props.color};
 `;
 
 const PopUp = styled.div<{ position: number }>`
@@ -71,22 +67,22 @@ const Sidebar: React.FC<Props> = observer(({ drawingSettings }) => {
 
   return (
     <Container>
-      <Button
+      <StyledButton
         position={1}
-        color={penColor.value}
-        className="las la-pen"
+        color={penColor}
+        icon="las la-pen"
         onClick={() => togglePopUp(PopUpKind.PenColor)}
       />
-      <Button
+      <StyledButton
         position={2}
-        color={penColor.value}
-        className="las la-pencil-ruler"
+        color={penColor}
+        icon="las la-pencil-ruler"
         onClick={() => togglePopUp(PopUpKind.PenSize)}
       />
-      <Button
+      <StyledButton
         position={3}
-        color={backgroundColor.value}
-        className="las la-fill-drip"
+        color={backgroundColor}
+        icon="las la-fill-drip"
         onClick={() => togglePopUp(PopUpKind.BackgroundColor)}
       />
 
