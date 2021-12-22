@@ -12,19 +12,19 @@ const Container = styled.div`
   font-size: 2.5em;
 `;
 
-const Button = styled.i<{ num: number }>`
+const Button = styled.i<{ position: number }>`
   cursor: pointer;
   margin: 0.2em 0.15em 0 0.2em;
   background-color: #f0f0f0;
   border-radius: 0.2em;
   grid-column: 1 / span 1;
-  grid-row: ${(props) => props.num} / span 1;
+  grid-row: ${(props) => props.position} / span 1;
 `;
 
-const PopUp = styled.div<{ num: number }>`
+const PopUp = styled.div<{ position: number }>`
   z-index: 1;
   grid-column: 2 / span 1;
-  grid-row: ${(props) => props.num} / span 1;
+  grid-row: ${(props) => props.position} / span 1;
 `;
 
 const PenSizePopUp = styled(PopUp)`
@@ -62,30 +62,30 @@ const Sidebar: React.FC = () => {
 
   return (
     <Container>
-      <Button num={1} className="las la-pen" onClick={() => togglePopUp(PopUpKind.PenColor)} />
+      <Button position={1} className="las la-pen" onClick={() => togglePopUp(PopUpKind.PenColor)} />
       <Button
-        num={2}
+        position={2}
         className="las la-pencil-ruler"
         onClick={() => togglePopUp(PopUpKind.PenSize)}
       />
       <Button
-        num={3}
+        position={3}
         className="las la-fill-drip"
         onClick={() => togglePopUp(PopUpKind.BackgroundColor)}
       />
 
       {currentPopUp === PopUpKind.PenColor && (
-        <PopUp num={1}>
+        <PopUp position={1}>
           <StyledColorPicker />
         </PopUp>
       )}
       {currentPopUp === PopUpKind.PenSize && (
-        <PenSizePopUp num={2}>
+        <PenSizePopUp position={2}>
           <StyledSizePicker />
         </PenSizePopUp>
       )}
       {currentPopUp === PopUpKind.BackgroundColor && (
-        <PopUp num={3}>
+        <PopUp position={3}>
           <StyledColorPicker />
         </PopUp>
       )}
