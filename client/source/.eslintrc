@@ -3,13 +3,7 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "extends": [
-    "react-app",
-    "airbnb-typescript",
-    "prettier",
-    "plugin:import/typescript",
-    "plugin:mobx/recommended"
-  ],
+  "extends": ["react-app", "airbnb-typescript", "prettier", "plugin:import/typescript"],
   "settings": {
     "import/resolver": {
       "node": {
@@ -24,6 +18,9 @@
     "import/prefer-default-export": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
     "react/react-in-jsx-scope": "off",
+    "mobx/exhaustive-make-observable": "warn",
+    "mobx/unconditional-make-observable": "error",
+    "mobx/missing-make-observable": "error",
     "no-empty": ["error", { "allowEmptyCatch": true }],
     "no-restricted-imports": [
       "error",
