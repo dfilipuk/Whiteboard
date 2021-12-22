@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 
 import { App } from 'panels';
 
-import './index.css';
-
 ReactDOM.render(
   <React.StrictMode>
     <App />
