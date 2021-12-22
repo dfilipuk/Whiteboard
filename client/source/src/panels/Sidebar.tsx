@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
 import { Button, ColorPicker, SizePicker } from 'components';
+import { MIN_PEN_SIZE, MAX_PEN_SIZE } from 'constants/drawing';
 import { DrawingSettings } from 'stores';
 
 const Container = styled.div`
@@ -93,7 +94,7 @@ const Sidebar: React.FC<Props> = observer(({ drawingSettings }) => {
       )}
       {currentPopUp === PopUpKind.PenSize && (
         <PenSizePopUp position={2}>
-          <StyledSizePicker size={penSize} />
+          <StyledSizePicker size={penSize} minSize={MIN_PEN_SIZE} maxSize={MAX_PEN_SIZE} />
         </PenSizePopUp>
       )}
       {currentPopUp === PopUpKind.BackgroundColor && (

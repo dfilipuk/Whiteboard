@@ -3,7 +3,6 @@ import Slider from 'rc-slider';
 import styled from 'styled-components';
 
 import { Size } from 'stores';
-import { MIN_PEN_SIZE, MAX_PEN_SIZE } from 'constants/drawing';
 
 import 'rc-slider/assets/index.css';
 
@@ -15,9 +14,11 @@ const Container = styled.div`
 type Props = {
   className?: string;
   size: Size;
+  minSize: number;
+  maxSize: number;
 };
 
-const SizePicker: React.FC<Props> = ({ className, size }) => {
+const SizePicker: React.FC<Props> = ({ className, size, minSize, maxSize }) => {
   const SliderWithTooltip = Slider.createSliderWithTooltip(Slider);
 
   const formatTip = useCallback((value: number) => `${value}px`, []);
@@ -26,8 +27,8 @@ const SizePicker: React.FC<Props> = ({ className, size }) => {
   return (
     <Container className={className}>
       <SliderWithTooltip
-        min={MIN_PEN_SIZE}
-        max={MAX_PEN_SIZE}
+        min={minSize}
+        max={maxSize}
         defaultValue={size.value}
         tipFormatter={formatTip}
         onAfterChange={updateValue}
