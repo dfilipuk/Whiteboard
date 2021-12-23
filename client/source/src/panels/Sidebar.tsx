@@ -1,4 +1,4 @@
-import React, { MouseEvent, useCallback } from 'react';
+import React, { MouseEvent, useCallback, useEffect } from 'react';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
@@ -86,11 +86,13 @@ const Sidebar: React.FC = observer(() => {
     [workspaceState]
   );
 
-  autorun(() => {
-    if (workspaceState.focus !== FocusTarget.PopUp) {
-      workspaceState.setPopUp(null);
-    }
-  });
+  useEffect(() =>
+    autorun(() => {
+      if (workspaceState.focus !== FocusTarget.PopUp) {
+        workspaceState.setPopUp(null);
+      }
+    })
+  );
 
   return (
     <Container onClick={setFocusToSidebar}>
