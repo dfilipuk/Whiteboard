@@ -15,6 +15,7 @@ class MessageBus<T> {
     makeObservable(this, {
       items: observable,
       publish: action,
+      publishChunk: action,
     });
     this.items = [];
     this.debounce = debounce;
@@ -23,6 +24,10 @@ class MessageBus<T> {
 
   publish(item: T) {
     this.items.push(item);
+  }
+
+  publishChunk(items: T[]) {
+    this.items.push(...items);
   }
 
   subscribe(processor: (items: T[]) => void) {
