@@ -5,7 +5,8 @@ import styled from 'styled-components';
 
 import { Button, ColorPicker, SizePicker } from 'components';
 import { MIN_PEN_SIZE, MAX_PEN_SIZE } from 'constants/drawing';
-import { DrawingSettings, FocusTarget, PopUpKind, WorkspaceState } from 'stores';
+import { useWorkspaceStores } from 'hooks';
+import { FocusTarget, PopUpKind } from 'stores';
 
 const Container = styled.div`
   grid-area: 1 / 1 / 1 / 1;
@@ -47,12 +48,8 @@ const StyledSizePicker = styled(SizePicker)`
   box-shadow: 0 0 0.15em 0.01em gray;
 `;
 
-type Props = {
-  drawingSettings: DrawingSettings;
-  workspaceState: WorkspaceState;
-};
-
-const Sidebar: React.FC<Props> = observer(({ drawingSettings, workspaceState }) => {
+const Sidebar: React.FC = observer(() => {
+  const { drawingSettings, workspaceState } = useWorkspaceStores();
   const { penSize, penColor, backgroundColor } = drawingSettings;
 
   const togglePopUp = useCallback(

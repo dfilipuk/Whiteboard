@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
+import { useWorkspaceStores } from 'hooks';
 import { Point } from 'models';
 import { useWindowEvents } from 'services';
-import { DrawingSettings, FocusTarget, WorkspaceState } from 'stores';
+import { FocusTarget } from 'stores';
 import { drawLine, fromClientToOffsetCoordinates, resizeCanvas } from 'utils';
 
 const Container = styled.div`
@@ -18,12 +19,8 @@ const Canvas = styled.canvas`
   position: absolute;
 `;
 
-type Props = {
-  drawingSettings: DrawingSettings;
-  workspaceState: WorkspaceState;
-};
-
-const Whiteboard: React.FC<Props> = observer(({ drawingSettings, workspaceState }) => {
+const Whiteboard: React.FC = observer(() => {
+  const { drawingSettings, workspaceState } = useWorkspaceStores();
   const { penSize, penColor, backgroundColor } = drawingSettings;
 
   const { resize } = useWindowEvents();

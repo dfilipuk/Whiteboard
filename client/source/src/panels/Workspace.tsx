@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { DEFAULT_PEN_COLOR, DEFAULT_PEN_SIZE } from 'constants/drawing';
+import { WorkspaceStoresProvider } from 'hooks';
 import { Color, DrawingSettings, FocusTarget, Size, WorkspaceState } from 'stores';
 
 import { Sidebar } from './Sidebar';
@@ -23,10 +24,12 @@ const Workspace: React.FC<Props> = ({ backgroundColor }) => {
   const [state] = useState<WorkspaceState>(new WorkspaceState(FocusTarget.Whiteboard, null));
 
   return (
-    <Container>
-      <Sidebar drawingSettings={settings} workspaceState={state} />
-      <Whiteboard drawingSettings={settings} workspaceState={state} />
-    </Container>
+    <WorkspaceStoresProvider drawingSettings={settings} workspaceState={state}>
+      <Container>
+        <Sidebar />
+        <Whiteboard />
+      </Container>
+    </WorkspaceStoresProvider>
   );
 };
 
