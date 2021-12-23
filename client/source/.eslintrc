@@ -11,13 +11,16 @@
       }
     }
   },
-  "plugins": ["import", "prettier", "react", "react-hooks"],
+  "plugins": ["import", "prettier", "react", "react-hooks", "mobx"],
   "rules": {
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "import/prefer-default-export": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
     "react/react-in-jsx-scope": "off",
+    "mobx/exhaustive-make-observable": "warn",
+    "mobx/unconditional-make-observable": "error",
+    "mobx/missing-make-observable": "error",
     "no-empty": ["error", { "allowEmptyCatch": true }],
     "no-restricted-imports": [
       "error",

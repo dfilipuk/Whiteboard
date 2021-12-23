@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+
+import { DEFAULT_PEN_COLOR, DEFAULT_PEN_SIZE } from 'constants/drawing';
+import { WorkspaceStoresProvider } from 'hooks';
+import { Color, DrawingSettings, FocusTarget, Size, WorkspaceState } from 'stores';
 
 import { Sidebar } from './Sidebar';
 import { Whiteboard } from './Whiteboard';
@@ -9,12 +13,29 @@ const Container = styled.div`
   grid-template-columns: auto 1fr;
 `;
 
-const Workspace: React.FC = () => {
+type Props = {
+  backgroundColor: Color;
+  initialPenSize?: number;
+  initialPenColor?: string;
+};
+
+const Workspace: React.FC<Props> = ({ backgroundColor, initialPenSize, initialPenColor }) => {
+  const [settings] = useState<DrawingSettings>(
+    new DrawingSettings(
+      new Size(initialPenSize ?? DEFAULT_PEN_SIZE),
+      new Color(initialPenColor ?? DEFAULT_PEN_COLOR),
+      backgroundColor
+    )
+  );
+  const [state] = useState<WorkspaceState>(new WorkspaceState(FocusTarget.Whiteboard, null));
+
   return (
-    <Container>
-      <Sidebar />
-      <Whiteboard />
-    </Container>
+    <WorkspaceStoresProvider drawingSettings={settings} workspaceState={state}>
+      <Container>
+        <Sidebar />
+        <Whiteboard />
+      </Container>
+    </WorkspaceStoresProvider>
   );
 };
 

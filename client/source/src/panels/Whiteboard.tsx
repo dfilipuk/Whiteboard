@@ -1,8 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
+import { useWorkspaceStores } from 'hooks';
 import { Point } from 'models';
 import { useWindowEvents } from 'services';
+import { FocusTarget } from 'stores';
 import { drawLine, fromClientToOffsetCoordinates, resizeCanvas } from 'utils';
 
 const Container = styled.div`
@@ -16,7 +19,10 @@ const Canvas = styled.canvas`
   position: absolute;
 `;
 
-const Whiteboard: React.FC = () => {
+const Whiteboard: React.FC = observer(() => {
+  const { drawingSettings, workspaceState } = useWorkspaceStores();
+  const { penSize, penColor, backgroundColor } = drawingSettings;
+
   const { resize } = useWindowEvents();
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
@@ -28,6 +34,11 @@ const Whiteboard: React.FC = () => {
 
   const setupCanvasNode = useCallback((node) => setCanvas(node), []);
   const setupContainerNode = useCallback((node) => setContainer(node), []);
+
+  const setFocus = useCallback(
+    () => workspaceState.setFocus(FocusTarget.Whiteboard),
+    [workspaceState]
+  );
 
   const startDrawing = useCallback(
     (point: Point) => {
@@ -43,11 +54,11 @@ const Whiteboard: React.FC = () => {
     (point: Point) => {
       if (drawing.current && canvas && context) {
         const newPoint = fromClientToOffsetCoordinates(canvas, point);
-        drawLine(context, currentPoint.current, newPoint);
+        drawLine(context, currentPoint.current, newPoint, penColor.value, penSize.value);
         currentPoint.current = newPoint;
       }
     },
-    [canvas, context]
+    [canvas, context, penColor.value, penSize.value]
   );
 
   const stopDrawing = useCallback(
@@ -55,10 +66,10 @@ const Whiteboard: React.FC = () => {
       if (drawing.current && canvas && context) {
         drawing.current = false;
         const newPoint = fromClientToOffsetCoordinates(canvas, point);
-        drawLine(context, currentPoint.current, newPoint);
+        drawLine(context, currentPoint.current, newPoint, penColor.value, penSize.value);
       }
     },
-    [canvas, context]
+    [canvas, context, penColor.value, penSize.value]
   );
 
   useEffect(() => {
@@ -76,9 +87,10 @@ const Whiteboard: React.FC = () => {
   }, [canvas]);
 
   return (
-    <Container ref={setupContainerNode}>
+    <Container ref={setupContainerNode} onMouseDown={setFocus} onTouchStart={setFocus}>
       <Canvas
         ref={setupCanvasNode}
+        style={{ backgroundColor: backgroundColor.value }}
         onMouseDown={(e) => startDrawing(new Point(e.clientX, e.clientY))}
         onMouseMove={(e) => continueDrawing(new Point(e.clientX, e.clientY))}
         onMouseUp={(e) => stopDrawing(new Point(e.clientX, e.clientY))}
@@ -90,6 +102,6 @@ const Whiteboard: React.FC = () => {
       />
     </Container>
   );
-};
+});
 
 export { Whiteboard };

@@ -10,7 +10,7 @@ const useWindowEvents = (): WindowEventsContext => {
   const context = useContext(windowEventsContext);
 
   if (context === undefined) {
-    throw new Error('useWindowEvents must be used with an WindowEvents provider');
+    throw new Error('useWindowEvents must be used with a WindowEvents provider');
   }
 
   return context;
