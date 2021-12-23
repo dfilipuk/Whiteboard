@@ -20,12 +20,18 @@ async function resizeCanvas(
   }
 }
 
-function drawLine(drawingContext: CanvasRenderingContext2D, from: Point, to: Point) {
+function drawLine(
+  drawingContext: CanvasRenderingContext2D,
+  from: Point,
+  to: Point,
+  color: string,
+  width: number
+) {
   drawingContext.beginPath();
   drawingContext.moveTo(from.x, from.y);
+  drawingContext.strokeStyle = color;
+  drawingContext.lineWidth = width;
   drawingContext.lineTo(to.x, to.y);
-  drawingContext.strokeStyle = 'black';
-  drawingContext.lineWidth = 2;
   drawingContext.stroke();
   drawingContext.closePath();
 }

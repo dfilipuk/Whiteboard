@@ -1,7 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React, { MouseEvent, useCallback } from 'react';
+import { autorun } from 'mobx';
+import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
-import { ColorPicker, SizePicker } from 'components';
+import { Button, ColorPicker, SizePicker } from 'components';
+import { MIN_PEN_SIZE, MAX_PEN_SIZE } from 'constants/drawing';
+import { useWorkspaceStores } from 'hooks';
+import { FocusTarget, PopUpKind } from 'stores';
 
 const Container = styled.div`
   grid-area: 1 / 1 / 1 / 1;
@@ -12,11 +17,8 @@ const Container = styled.div`
   font-size: 2.5em;
 `;
 
-const Button = styled.i<{ position: number }>`
-  cursor: pointer;
+const StyledButton = styled(Button)<{ position: number }>`
   margin: 0.2em 0.15em 0 0.2em;
-  background-color: #f0f0f0;
-  border-radius: 0.2em;
   grid-column: 1 / span 1;
   grid-row: ${(props) => props.position} / span 1;
 `;
@@ -46,51 +48,76 @@ const StyledSizePicker = styled(SizePicker)`
   box-shadow: 0 0 0.15em 0.01em gray;
 `;
 
-enum PopUpKind {
-  PenColor,
-  PenSize,
-  BackgroundColor,
-}
-
-const Sidebar: React.FC = () => {
-  const [currentPopUp, setCurrentPopUp] = useState<PopUpKind | null>(null);
+const Sidebar: React.FC = observer(() => {
+  const { drawingSettings, workspaceState } = useWorkspaceStores();
+  const { penSize, penColor, backgroundColor } = drawingSettings;
 
   const togglePopUp = useCallback(
-    (popup: PopUpKind) => setCurrentPopUp(currentPopUp === popup ? null : popup),
-    [currentPopUp]
+    (popUp: PopUpKind) => {
+      if (workspaceState.popUp === popUp) {
+        workspaceState.setPopUp(null);
+        workspaceState.setFocus(FocusTarget.Sidebar);
+      } else {
+        workspaceState.setPopUp(popUp);
+        workspaceState.setFocus(FocusTarget.PopUp);
+      }
+    },
+    [workspaceState]
+  );
+  const togglePenColor = useCallback(() => togglePopUp(PopUpKind.PenColor), [togglePopUp]);
+  const togglePenSize = useCallback(() => togglePopUp(PopUpKind.PenSize), [togglePopUp]);
+  const toggleBackgroundColor = useCallback(
+    () => togglePopUp(PopUpKind.BackgroundColor),
+    [togglePopUp]
+  );
+  const setFocusToSidebar = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) {
+        workspaceState.setFocus(FocusTarget.Sidebar);
+      }
+    },
+    [workspaceState]
   );
 
+  autorun(() => {
+    if (workspaceState.focus !== FocusTarget.PopUp) {
+      workspaceState.setPopUp(null);
+    }
+  });
+
   return (
-    <Container>
-      <Button position={1} className="las la-pen" onClick={() => togglePopUp(PopUpKind.PenColor)} />
-      <Button
+    <Container onClick={setFocusToSidebar}>
+      <StyledButton position={1} color={penColor} icon="las la-pen" onClick={togglePenColor} />
+      <StyledButton
         position={2}
-        className="las la-pencil-ruler"
-        onClick={() => togglePopUp(PopUpKind.PenSize)}
+        color={penColor}
+        icon="las la-pencil-ruler"
+        onClick={togglePenSize}
       />
-      <Button
+      <StyledButton
         position={3}
-        className="las la-fill-drip"
-        onClick={() => togglePopUp(PopUpKind.BackgroundColor)}
+        color={backgroundColor}
+        icon="las la-fill-drip"
+        onClick={toggleBackgroundColor}
       />
 
-      {currentPopUp === PopUpKind.PenColor && (
+      {workspaceState.popUp === PopUpKind.PenColor && (
         <PopUp position={1}>
-          <StyledColorPicker />
+          <StyledColorPicker color={penColor} />
         </PopUp>
       )}
-      {currentPopUp === PopUpKind.PenSize && (
+      {workspaceState.popUp === PopUpKind.PenSize && (
         <PenSizePopUp position={2}>
-          <StyledSizePicker />
+          <StyledSizePicker size={penSize} minSize={MIN_PEN_SIZE} maxSize={MAX_PEN_SIZE} />
         </PenSizePopUp>
       )}
-      {currentPopUp === PopUpKind.BackgroundColor && (
+      {workspaceState.popUp === PopUpKind.BackgroundColor && (
         <PopUp position={3}>
-          <StyledColorPicker />
+          <StyledColorPicker color={backgroundColor} />
         </PopUp>
       )}
     </Container>
   );
-};
+});
 
 export { Sidebar };
