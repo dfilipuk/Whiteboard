@@ -8,6 +8,7 @@ import {
   SERVER_TO_CLIENT_DEBOUNCE,
   SERVER_TO_CLIENT_MAX_CHUNK_SIZE,
 } from 'constants/server';
+import { RemoteWorkspaceStoresProvider } from 'hooks';
 import { Line } from 'models';
 import { MessageBus, RemoteWorkspace, WindowEventsProvider } from 'services';
 import { Color } from 'stores';
@@ -26,18 +27,20 @@ const App: React.FC = () => {
 
   return (
     <WindowEventsProvider>
-      <BrowserRouter>
-        <WorkspaceDebug
-          backgroundColor={color}
-          inputBus={serverToClientBus}
-          outputBus={clientToServerBus}
-        />
-        <RemoteWorkspace
-          backgroundColor={color}
-          inputBus={clientToServerBus}
-          outputBus={serverToClientBus}
-        />
-      </BrowserRouter>
+      <RemoteWorkspaceStoresProvider>
+        <BrowserRouter>
+          <WorkspaceDebug
+            backgroundColor={color}
+            inputBus={serverToClientBus}
+            outputBus={clientToServerBus}
+          />
+          <RemoteWorkspace
+            backgroundColor={color}
+            inputBus={clientToServerBus}
+            outputBus={serverToClientBus}
+          />
+        </BrowserRouter>
+      </RemoteWorkspaceStoresProvider>
     </WindowEventsProvider>
   );
 };
