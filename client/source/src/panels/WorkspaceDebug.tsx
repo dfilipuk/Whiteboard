@@ -2,15 +2,19 @@ import React, { useEffect, useMemo } from 'react';
 
 import { MAX_PEN_SIZE, MIN_PEN_SIZE } from 'constants/drawing';
 import { useQueryParams } from 'hooks';
+import { Line } from 'models';
+import { MessageBus } from 'services';
 import { Color } from 'stores';
 
 import { Workspace } from './Workspace';
 
 type Props = {
   backgroundColor: Color;
+  inputBus: MessageBus<Line>;
+  outputBus: MessageBus<Line>;
 };
 
-const WorkspaceDebug: React.FC<Props> = ({ backgroundColor }) => {
+const WorkspaceDebug: React.FC<Props> = ({ backgroundColor, inputBus, outputBus }) => {
   const queryParams = useQueryParams();
 
   const penSize = useMemo((): number | undefined => {
@@ -36,6 +40,8 @@ const WorkspaceDebug: React.FC<Props> = ({ backgroundColor }) => {
 
   return (
     <Workspace
+      inputBus={inputBus}
+      outputBus={outputBus}
       initialPenSize={penSize}
       initialPenColor={penColor}
       backgroundColor={backgroundColor}

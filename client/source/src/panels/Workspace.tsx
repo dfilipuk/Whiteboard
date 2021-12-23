@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 import { DEFAULT_PEN_COLOR, DEFAULT_PEN_SIZE } from 'constants/drawing';
 import { WorkspaceStoresProvider } from 'hooks';
+import { Line } from 'models';
+import { MessageBus } from 'services';
 import { Color, DrawingSettings, FocusTarget, Size, WorkspaceState } from 'stores';
 
 import { Sidebar } from './Sidebar';
@@ -17,9 +19,17 @@ type Props = {
   backgroundColor: Color;
   initialPenSize?: number;
   initialPenColor?: string;
+  inputBus: MessageBus<Line>;
+  outputBus: MessageBus<Line>;
 };
 
-const Workspace: React.FC<Props> = ({ backgroundColor, initialPenSize, initialPenColor }) => {
+const Workspace: React.FC<Props> = ({
+  backgroundColor,
+  initialPenSize,
+  initialPenColor,
+  inputBus,
+  outputBus,
+}) => {
   const [settings] = useState<DrawingSettings>(
     new DrawingSettings(
       new Size(initialPenSize ?? DEFAULT_PEN_SIZE),
@@ -33,7 +43,7 @@ const Workspace: React.FC<Props> = ({ backgroundColor, initialPenSize, initialPe
     <WorkspaceStoresProvider drawingSettings={settings} workspaceState={state}>
       <Container>
         <Sidebar />
-        <Whiteboard />
+        <Whiteboard inputBus={inputBus} outputBus={outputBus} />
       </Container>
     </WorkspaceStoresProvider>
   );

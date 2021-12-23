@@ -1,4 +1,4 @@
-import { Point } from 'models';
+import { Line, Point } from 'models';
 
 async function resizeCanvas(
   canvas: HTMLCanvasElement,
@@ -20,18 +20,12 @@ async function resizeCanvas(
   }
 }
 
-function drawLine(
-  drawingContext: CanvasRenderingContext2D,
-  from: Point,
-  to: Point,
-  color: string,
-  width: number
-) {
+function drawLine(drawingContext: CanvasRenderingContext2D, line: Line) {
   drawingContext.beginPath();
-  drawingContext.moveTo(from.x, from.y);
-  drawingContext.strokeStyle = color;
-  drawingContext.lineWidth = width;
-  drawingContext.lineTo(to.x, to.y);
+  drawingContext.moveTo(line.from.x, line.from.y);
+  drawingContext.strokeStyle = line.color;
+  drawingContext.lineWidth = line.width;
+  drawingContext.lineTo(line.to.x, line.to.y);
   drawingContext.stroke();
   drawingContext.closePath();
 }
