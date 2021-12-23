@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Point } from 'models';
 import { useWindowEvents } from 'services';
-import { DrawingSettings } from 'stores';
+import { DrawingSettings, FocusTarget, WorkspaceState } from 'stores';
 import { drawLine, fromClientToOffsetCoordinates, resizeCanvas } from 'utils';
 
 const Container = styled.div`
@@ -20,9 +20,10 @@ const Canvas = styled.canvas`
 
 type Props = {
   drawingSettings: DrawingSettings;
+  workspaceState: WorkspaceState;
 };
 
-const Whiteboard: React.FC<Props> = observer(({ drawingSettings }) => {
+const Whiteboard: React.FC<Props> = observer(({ drawingSettings, workspaceState }) => {
   const { penSize, penColor, backgroundColor } = drawingSettings;
 
   const { resize } = useWindowEvents();
@@ -36,6 +37,11 @@ const Whiteboard: React.FC<Props> = observer(({ drawingSettings }) => {
 
   const setupCanvasNode = useCallback((node) => setCanvas(node), []);
   const setupContainerNode = useCallback((node) => setContainer(node), []);
+
+  const setFocus = useCallback(
+    () => workspaceState.setFocus(FocusTarget.Whiteboard),
+    [workspaceState]
+  );
 
   const startDrawing = useCallback(
     (point: Point) => {
@@ -84,7 +90,7 @@ const Whiteboard: React.FC<Props> = observer(({ drawingSettings }) => {
   }, [canvas]);
 
   return (
-    <Container ref={setupContainerNode}>
+    <Container ref={setupContainerNode} onMouseDown={setFocus} onTouchStart={setFocus}>
       <Canvas
         ref={setupCanvasNode}
         style={{ backgroundColor: backgroundColor.value }}
