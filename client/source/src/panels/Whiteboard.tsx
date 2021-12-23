@@ -45,7 +45,7 @@ const Whiteboard: React.FC<Props> = observer(({ inputBus, outputBus }) => {
     [workspaceState]
   );
 
-  const startDrawing = useCallback(
+  const initDraw = useCallback(
     (point: Point) => {
       if (canvas) {
         drawing.current = true;
@@ -55,27 +55,19 @@ const Whiteboard: React.FC<Props> = observer(({ inputBus, outputBus }) => {
     [canvas]
   );
 
-  const continueDrawing = useCallback(
-    (point: Point) => {
+  const draw = useCallback(
+    (point: Point, stop: boolean) => {
       if (drawing.current && canvas && context) {
         const newPoint = fromClientToOffsetCoordinates(canvas, point);
         const line = new Line(currentPoint.current, newPoint, penSize.value, penColor.value);
         drawLine(context, line);
         outputBus.publish(line);
-        currentPoint.current = newPoint;
-      }
-    },
-    [canvas, context, outputBus, penColor.value, penSize.value]
-  );
 
-  const stopDrawing = useCallback(
-    (point: Point) => {
-      if (drawing.current && canvas && context) {
-        drawing.current = false;
-        const newPoint = fromClientToOffsetCoordinates(canvas, point);
-        const line = new Line(currentPoint.current, newPoint, penSize.value, penColor.value);
-        drawLine(context, line);
-        outputBus.publish(line);
+        if (stop) {
+          drawing.current = false;
+        } else {
+          currentPoint.current = newPoint;
+        }
       }
     },
     [canvas, context, outputBus, penColor.value, penSize.value]
@@ -108,14 +100,14 @@ const Whiteboard: React.FC<Props> = observer(({ inputBus, outputBus }) => {
       <Canvas
         ref={setupCanvasNode}
         style={{ backgroundColor: backgroundColor.value }}
-        onMouseDown={(e) => startDrawing(new Point(e.clientX, e.clientY))}
-        onMouseMove={(e) => continueDrawing(new Point(e.clientX, e.clientY))}
-        onMouseUp={(e) => stopDrawing(new Point(e.clientX, e.clientY))}
-        onMouseOut={(e) => stopDrawing(new Point(e.clientX, e.clientY))}
-        onTouchStart={(e) => startDrawing(new Point(e.touches[0].clientX, e.touches[0].clientY))}
-        onTouchMove={(e) => continueDrawing(new Point(e.touches[0].clientX, e.touches[0].clientY))}
-        onTouchEnd={(e) => stopDrawing(new Point(e.touches[0].clientX, e.touches[0].clientY))}
-        onTouchCancel={(e) => stopDrawing(new Point(e.touches[0].clientX, e.touches[0].clientY))}
+        onMouseDown={(e) => initDraw(new Point(e.clientX, e.clientY))}
+        onMouseMove={(e) => draw(new Point(e.clientX, e.clientY), false)}
+        onMouseUp={(e) => draw(new Point(e.clientX, e.clientY), true)}
+        onMouseOut={(e) => draw(new Point(e.clientX, e.clientY), true)}
+        onTouchStart={(e) => initDraw(new Point(e.touches[0].clientX, e.touches[0].clientY))}
+        onTouchMove={(e) => draw(new Point(e.touches[0].clientX, e.touches[0].clientY), false)}
+        onTouchEnd={(e) => draw(new Point(e.touches[0].clientX, e.touches[0].clientY), true)}
+        onTouchCancel={(e) => draw(new Point(e.touches[0].clientX, e.touches[0].clientY), true)}
       />
     </Container>
   );
