@@ -1,11 +1,8 @@
 import React from 'react';
-import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
-import { Color } from 'stores';
-
-const Element = styled.i`
-  cursor: pointer;
+const Element = styled.i<{ clickable: boolean }>`
+  cursor: ${(props) => (props.clickable ? 'pointer' : 'auto')};
   background-color: #dadada;
   border-radius: 0.2em;
 `;
@@ -13,14 +10,19 @@ const Element = styled.i`
 type Props = {
   className?: string;
   icon: string;
-  color: Color;
+  color: string;
   onClick?: () => void;
 };
 
-const Button: React.FC<Props> = observer(({ className, icon, color, onClick }) => {
+const Button: React.FC<Props> = ({ className, icon, color, onClick }) => {
   return (
-    <Element className={`${className} ${icon}`} style={{ color: color.value }} onClick={onClick} />
+    <Element
+      style={{ color }}
+      onClick={onClick}
+      clickable={onClick !== undefined}
+      className={`${className} ${icon}`}
+    />
   );
-});
+};
 
 export { Button };

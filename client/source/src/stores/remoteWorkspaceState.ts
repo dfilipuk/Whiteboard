@@ -1,9 +1,9 @@
 import { action, makeObservable, observable } from 'mobx';
 
 enum ConnectionStatus {
-  Connected,
-  Connecting,
-  Disconnected,
+  Connected = 'connected',
+  Connecting = 'connecting',
+  Disconnected = 'disconnected',
 }
 
 class RemoteWorkspaceState {
