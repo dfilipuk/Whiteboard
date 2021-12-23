@@ -10,8 +10,8 @@ import { WorkspaceDebug } from './WorkspaceDebug';
 
 const App: React.FC = () => {
   const [color] = useState<Color>(new Color(DEFAULT_BACKGROUND_COLOR));
-  const [busA] = useState<MessageBus<Line>>(new MessageBus<Line>(100, 100));
-  const [busB] = useState<MessageBus<Line>>(new MessageBus<Line>(100, 100));
+  const [busA] = useState<MessageBus<Line>>(new MessageBus<Line>(10, 100));
+  const [busB] = useState<MessageBus<Line>>(new MessageBus<Line>(10, 100));
 
   return (
     <WindowEventsProvider>
