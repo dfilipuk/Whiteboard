@@ -15,11 +15,17 @@ const Container = styled.div`
 
 type Props = {
   backgroundColor: Color;
+  initialPenSize?: number;
+  initialPenColor?: string;
 };
 
-const Workspace: React.FC<Props> = ({ backgroundColor }) => {
+const Workspace: React.FC<Props> = ({ backgroundColor, initialPenSize, initialPenColor }) => {
   const [settings] = useState<DrawingSettings>(
-    new DrawingSettings(new Size(DEFAULT_PEN_SIZE), new Color(DEFAULT_PEN_COLOR), backgroundColor)
+    new DrawingSettings(
+      new Size(initialPenSize ?? DEFAULT_PEN_SIZE),
+      new Color(initialPenColor ?? DEFAULT_PEN_COLOR),
+      backgroundColor
+    )
   );
   const [state] = useState<WorkspaceState>(new WorkspaceState(FocusTarget.Whiteboard, null));
 

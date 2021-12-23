@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 import { DEFAULT_BACKGROUND_COLOR } from 'constants/drawing';
 import { WindowEventsProvider } from 'services';
 import { Color } from 'stores';
 
-import { Workspace } from './Workspace';
+import { WorkspaceDebug } from './WorkspaceDebug';
 
 const App: React.FC = () => {
   const [color] = useState<Color>(new Color(DEFAULT_BACKGROUND_COLOR));
 
   return (
     <WindowEventsProvider>
-      <Workspace backgroundColor={color} />
+      <BrowserRouter>
+        <WorkspaceDebug backgroundColor={color} />
+      </BrowserRouter>
     </WindowEventsProvider>
   );
 };
