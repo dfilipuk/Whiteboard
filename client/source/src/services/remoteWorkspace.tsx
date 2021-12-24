@@ -69,7 +69,7 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
     [connection, setBackground]
   );
 
-  const startConnection = useCallback(async () => {
+  const connect = useCallback(async () => {
     try {
       remoteWorkspaceState.setStatus(ConnectionStatus.Connecting);
       await connection.start();
@@ -105,7 +105,7 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
   useEffect(() =>
     autorun(() => {
       if (remoteWorkspaceState.connectionRequested) {
-        startConnection();
+        connect();
       }
     })
   );
