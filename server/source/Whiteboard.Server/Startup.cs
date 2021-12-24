@@ -26,7 +26,7 @@ namespace Whiteboard.Server
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<DrawHub>("/drawhub");
+                endpoints.MapHub<DrawHub>("/hub/draw");
 
                 endpoints.MapHealthChecks("/api/health");
                 endpoints.MapGet("/{**path}", context =>
