@@ -15,7 +15,7 @@ type Props = {
   outputBus: MessageBus<Line>;
 };
 
-const RemoteWorkspace: React.FC<Props> = () => {
+const RemoteWorkspace: React.FC<Props> = ({ backgroundColor }) => {
   const { remoteWorkspaceState } = useRemoteWorkspaceStores();
 
   const connection = useMemo(
@@ -39,10 +39,21 @@ const RemoteWorkspace: React.FC<Props> = () => {
     }
   }, [connection, remoteWorkspaceState]);
 
+  const setBackground = useCallback(
+    async (color: string) => {
+      try {
+        await connection.invoke('SetBackground', color);
+      } catch {}
+    },
+    [connection]
+  );
+
   useEffect(() => {
     connection.onclose(() => remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected));
     connection.onreconnected(() => remoteWorkspaceState.setStatus(ConnectionStatus.Connected));
     connection.onreconnecting(() => remoteWorkspaceState.setStatus(ConnectionStatus.Connecting));
+
+    connection.on('SetBackground', (color: string) => backgroundColor.setValue(color));
 
     return () => {
       connection.stop();
@@ -53,6 +64,15 @@ const RemoteWorkspace: React.FC<Props> = () => {
     autorun(() => {
       if (remoteWorkspaceState.connectionRequested) {
         startConnection();
+      }
+    })
+  );
+
+  useEffect(() =>
+    autorun(() => {
+      const color = backgroundColor.value;
+      if (connection.state === signalR.HubConnectionState.Connected) {
+        setBackground(color);
       }
     })
   );
