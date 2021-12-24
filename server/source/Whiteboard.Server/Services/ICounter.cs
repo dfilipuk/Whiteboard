@@ -1,7 +1,6 @@
-namespace Whiteboard.Server.Services
+namespace Whiteboard.Server.Services;
+
+public interface ICounter
 {
-    public interface ICounter
-    {
-        ulong Next();
-    }
+    ulong Next();
 }
