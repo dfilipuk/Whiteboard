@@ -24,6 +24,7 @@ const RemoteWorkspace: React.FC<Props> = () => {
       new signalR.HubConnectionBuilder()
         .withUrl(`${SERVER_URL}/hub/draw`, { withCredentials: false })
         .withHubProtocol(new MessagePackHubProtocol())
+        .withAutomaticReconnect()
         .build(),
     []
   );
@@ -40,6 +41,8 @@ const RemoteWorkspace: React.FC<Props> = () => {
 
   useEffect(() => {
     connection.onclose(() => remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected));
+    connection.onreconnected(() => remoteWorkspaceState.setStatus(ConnectionStatus.Connected));
+    connection.onreconnecting(() => remoteWorkspaceState.setStatus(ConnectionStatus.Connecting));
 
     return () => {
       connection.stop();
