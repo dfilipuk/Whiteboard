@@ -20,9 +20,9 @@ namespace Whiteboard.Server.Hubs
             await Clients.Others.Draw(figures);
         }
 
-        public async Task<int> SetBackground(string color)
+        public async Task<ulong> SetBackground(string color)
         {
-            int version = _counter.Next();
+            ulong version = _counter.Next();
             await Clients.Others.SetBackground(color, version);
             return version;
         }

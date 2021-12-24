@@ -4,9 +4,9 @@ namespace Whiteboard.Server.Services
 {
     public class Counter : ICounter
     {
-        private int _counter = 0;
+        private ulong _counter = 0;
 
-        public int Next()
+        public ulong Next()
         {
             return Interlocked.Increment(ref _counter);
         }
