@@ -9,10 +9,19 @@ namespace Whiteboard.Server
 {
     public class Startup
     {
+        private readonly string AllowAllCorsPolicy = "AllowAll";
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHealthChecks();
             services.AddSignalR().AddMessagePackProtocol();
+
+            // https://docs.microsoft.com/en-us/aspnet/core/signalr/security?view=aspnetcore-6.0
+            services.AddCors(options =>
+                options.AddPolicy(AllowAllCorsPolicy, builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -21,6 +30,8 @@ namespace Whiteboard.Server
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(AllowAllCorsPolicy);
 
             app.UseRouting();
 

@@ -18,7 +18,7 @@ class RemoteWorkspaceState {
       connect: action,
       setStatus: action,
     });
-    this.connectionRequested = 0;
+    this.connectionRequested = 1;
     this.status = ConnectionStatus.Disconnected;
   }
 
