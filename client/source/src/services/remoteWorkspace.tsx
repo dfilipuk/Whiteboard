@@ -18,7 +18,8 @@ type Props = {
 const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus }) => {
   const { remoteWorkspaceState } = useRemoteWorkspaceStores();
 
-  const backgroundVersion = useRef<number>(0);
+  const backgroundColorVersion = useRef<number>(0);
+  const backgroundColorOnRemote = useRef<string | null>(null);
 
   const connection = useMemo(
     () =>
@@ -33,9 +34,10 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
 
   const setBackground = useCallback(
     (color: string, version: number) => {
-      if (version > backgroundVersion.current) {
+      if (version > backgroundColorVersion.current) {
+        backgroundColorOnRemote.current = color;
+        backgroundColorVersion.current = version;
         backgroundColor.setValue(color);
-        backgroundVersion.current = version;
       }
     },
     [backgroundColor]
@@ -53,11 +55,14 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
   const setBackgroundOnRemote = useCallback(
     async (color: string) => {
       try {
-        const versionBeforeCall = backgroundVersion.current;
+        const versionBeforeCall = backgroundColorVersion.current;
         const newVersion = await connection.invoke<number>('SetBackground', color);
 
-        if (backgroundVersion.current !== versionBeforeCall) {
+        if (backgroundColorVersion.current !== versionBeforeCall) {
           setBackground(color, newVersion);
+        } else {
+          backgroundColorOnRemote.current = color;
+          backgroundColorVersion.current = newVersion;
         }
       } catch {}
     },
@@ -108,7 +113,10 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
   useEffect(() =>
     autorun(() => {
       const color = backgroundColor.value;
-      if (connection.state === signalR.HubConnectionState.Connected) {
+      if (
+        color !== backgroundColorOnRemote.current &&
+        connection.state === signalR.HubConnectionState.Connected
+      ) {
         setBackgroundOnRemote(color);
       }
     })
