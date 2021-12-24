@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Whiteboard.Server.Hubs;
+using Whiteboard.Server.Services;
 
 namespace Whiteboard.Server
 {
@@ -15,6 +16,8 @@ namespace Whiteboard.Server
         {
             services.AddHealthChecks();
             services.AddSignalR().AddMessagePackProtocol();
+
+            services.AddSingleton<ICounter, Counter>();
 
             // https://docs.microsoft.com/en-us/aspnet/core/signalr/security?view=aspnetcore-6.0
             services.AddCors(options =>

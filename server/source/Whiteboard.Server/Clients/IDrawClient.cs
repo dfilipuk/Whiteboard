@@ -6,6 +6,6 @@ namespace Whiteboard.Server.Clients
     public interface IDrawClient
     {
         Task Draw(Line[] figures);
-        Task SetBackground(string color);
+        Task SetBackground(string color, int version);
     }
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { autorun } from 'mobx';
 import * as signalR from '@microsoft/signalr';
 import { MessagePackHubProtocol } from '@microsoft/signalr-protocol-msgpack';
@@ -17,6 +17,8 @@ type Props = {
 
 const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus }) => {
   const { remoteWorkspaceState } = useRemoteWorkspaceStores();
+
+  const backgroundVersion = useRef<number>(0);
 
   const connection = useMemo(
     () =>
@@ -38,13 +40,28 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
     [connection]
   );
 
+  const updateBackground = useCallback(
+    (color: string, version: number) => {
+      if (version > backgroundVersion.current) {
+        backgroundColor.setValue(color);
+        backgroundVersion.current = version;
+      }
+    },
+    [backgroundColor]
+  );
+
   const setBackground = useCallback(
     async (color: string) => {
       try {
-        await connection.invoke('SetBackground', color);
+        const versionBeforeCall = backgroundVersion.current;
+        const newVersion = await connection.invoke<number>('SetBackground', color);
+
+        if (backgroundVersion.current !== versionBeforeCall) {
+          updateBackground(color, newVersion);
+        }
       } catch {}
     },
-    [connection]
+    [connection, updateBackground]
   );
 
   const startConnection = useCallback(async () => {
@@ -73,7 +90,7 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
     });
 
     connection.on('Draw', (figures: Line[]) => outputBus.publishChunk(figures));
-    connection.on('SetBackground', (color: string) => backgroundColor.setValue(color));
+    connection.on('SetBackground', updateBackground);
 
     return () => {
       connection.stop();
