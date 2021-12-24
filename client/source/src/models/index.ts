@@ -1,2 +1,2 @@
-export { Line } from './line';
-export { Point } from './point';
+export type { Line } from './line';
+export type { Point } from './point';

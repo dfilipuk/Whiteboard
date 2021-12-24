@@ -3,34 +3,52 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Whiteboard.Server.Hubs;
+using Whiteboard.Server.Services;
 
-namespace Whiteboard.Server
+namespace Whiteboard.Server;
+
+public class Startup
 {
-    public class Startup
+    private readonly string AllowAllCorsPolicy = "AllowAll";
+    
+    public void ConfigureServices(IServiceCollection services)
     {
-        public void ConfigureServices(IServiceCollection services)
+        services.AddHealthChecks();
+        services.AddSignalR().AddMessagePackProtocol();
+
+        services.AddSingleton<ICounter, Counter>();
+
+        // https://docs.microsoft.com/en-us/aspnet/core/signalr/security?view=aspnetcore-6.0
+        services.AddCors(options =>
+            options.AddPolicy(AllowAllCorsPolicy, builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()));
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
         {
-            services.AddHealthChecks();
+            app.UseDeveloperExceptionPage();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        app.UseCors(AllowAllCorsPolicy);
+
+        app.UseRouting();
+
+        app.UseEndpoints(endpoints =>
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            endpoints.MapHub<DrawHub>("/hub/draw");
 
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
+            endpoints.MapHealthChecks("/api/health");
+            endpoints.MapGet("/{**path}", context =>
             {
-                endpoints.MapHealthChecks("/api/health");
-                endpoints.MapGet("/{**path}", context =>
-                {
-                    context.Response.Redirect("/api/health");
-                    return Task.CompletedTask;
-                });
+                context.Response.Redirect("/api/health");
+                return Task.CompletedTask;
             });
-        }
+        });
     }
 }
+
