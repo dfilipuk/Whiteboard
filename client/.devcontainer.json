@@ -8,7 +8,6 @@
     "source=whiteboard-client-node_modules,target=${containerWorkspaceFolder}/source/node_modules,type=volume"
   ],
   "containerEnv": {
-    "FAST_REFRESH": "true",
     "CHOKIDAR_USEPOLLING": "true"
   },
   "extensions": [
