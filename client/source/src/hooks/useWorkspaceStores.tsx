@@ -1,5 +1,7 @@
-import React, { createContext, useContext } from 'react';
-import { DrawingSettings, WorkspaceState } from 'stores';
+import React, { createContext, useContext, useState } from 'react';
+
+import { DEFAULT_PEN_COLOR, DEFAULT_PEN_SIZE } from 'constants/drawing';
+import { Color, DrawingSettings, FocusTarget, Size, WorkspaceState } from 'stores';
 
 type WorkspaceStoresContext = {
   workspaceState: WorkspaceState;
@@ -18,8 +20,25 @@ const useWorkspaceStores = (): WorkspaceStoresContext => {
   return context;
 };
 
-const WorkspaceStoresProvider: React.FC<WorkspaceStoresContext> = (props) => {
-  const { children, workspaceState, drawingSettings } = props;
+type Props = {
+  backgroundColor: Color;
+  initialPenSize?: number;
+  initialPenColor?: string;
+};
+
+const WorkspaceStoresProvider: React.FC<Props> = (props) => {
+  const { children, backgroundColor, initialPenSize, initialPenColor } = props;
+
+  const [drawingSettings] = useState<DrawingSettings>(
+    new DrawingSettings(
+      new Size(initialPenSize ?? DEFAULT_PEN_SIZE),
+      new Color(initialPenColor ?? DEFAULT_PEN_COLOR),
+      backgroundColor
+    )
+  );
+  const [workspaceState] = useState<WorkspaceState>(
+    new WorkspaceState(FocusTarget.Whiteboard, null)
+  );
 
   const value: WorkspaceStoresContext = {
     workspaceState,

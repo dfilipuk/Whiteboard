@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@microsoft/signalr": "^6.0.1",
+    "@microsoft/signalr-protocol-msgpack": "^6.0.1",
     "mobx": "^6.3.9",
     "mobx-react-lite": "^3.2.2",
     "mobx-utils": "^6.0.4",

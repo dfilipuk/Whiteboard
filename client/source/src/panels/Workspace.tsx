@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import { DEFAULT_PEN_COLOR, DEFAULT_PEN_SIZE } from 'constants/drawing';
 import { WorkspaceStoresProvider } from 'hooks';
 import { Line } from 'models';
 import { MessageBus } from 'services';
-import { Color, DrawingSettings, FocusTarget, Size, WorkspaceState } from 'stores';
+import { Color } from 'stores';
 
 import { Sidebar } from './Sidebar';
 import { Whiteboard } from './Whiteboard';
@@ -30,17 +29,12 @@ const Workspace: React.FC<Props> = ({
   inputBus,
   outputBus,
 }) => {
-  const [settings] = useState<DrawingSettings>(
-    new DrawingSettings(
-      new Size(initialPenSize ?? DEFAULT_PEN_SIZE),
-      new Color(initialPenColor ?? DEFAULT_PEN_COLOR),
-      backgroundColor
-    )
-  );
-  const [state] = useState<WorkspaceState>(new WorkspaceState(FocusTarget.Whiteboard, null));
-
   return (
-    <WorkspaceStoresProvider drawingSettings={settings} workspaceState={state}>
+    <WorkspaceStoresProvider
+      initialPenSize={initialPenSize}
+      initialPenColor={initialPenColor}
+      backgroundColor={backgroundColor}
+    >
       <Container>
         <Sidebar />
         <Whiteboard inputBus={inputBus} outputBus={outputBus} />

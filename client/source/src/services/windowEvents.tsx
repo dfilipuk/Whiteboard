@@ -16,9 +16,7 @@ const useWindowEvents = (): WindowEventsContext => {
   return context;
 };
 
-const WindowEventsProvider: React.FC = (props) => {
-  const { children } = props;
-
+const WindowEventsProvider: React.FC = ({ children }) => {
   const [resize, setResize] = useState<number>(1);
 
   const onWindowResize = useCallback(() => setResize((previousValue) => previousValue + 1), []);
