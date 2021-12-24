@@ -31,16 +31,7 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
     []
   );
 
-  const draw = useCallback(
-    async (figures: Line[]) => {
-      try {
-        await connection.invoke('Draw', figures);
-      } catch {}
-    },
-    [connection]
-  );
-
-  const updateBackground = useCallback(
+  const setBackground = useCallback(
     (color: string, version: number) => {
       if (version > backgroundVersion.current) {
         backgroundColor.setValue(color);
@@ -50,30 +41,39 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
     [backgroundColor]
   );
 
-  const setBackground = useCallback(
+  const drawOnRemote = useCallback(
+    async (figures: Line[]) => {
+      try {
+        await connection.invoke('Draw', figures);
+      } catch {}
+    },
+    [connection]
+  );
+
+  const setBackgroundOnRemote = useCallback(
     async (color: string) => {
       try {
         const versionBeforeCall = backgroundVersion.current;
         const newVersion = await connection.invoke<number>('SetBackground', color);
 
         if (backgroundVersion.current !== versionBeforeCall) {
-          updateBackground(color, newVersion);
+          setBackground(color, newVersion);
         }
       } catch {}
     },
-    [connection, updateBackground]
+    [connection, setBackground]
   );
 
   const startConnection = useCallback(async () => {
     try {
       remoteWorkspaceState.setStatus(ConnectionStatus.Connecting);
       await connection.start();
-      inputBus.subscribe(draw);
+      inputBus.subscribe(drawOnRemote);
       remoteWorkspaceState.setStatus(ConnectionStatus.Connected);
     } catch {
       remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected);
     }
-  }, [connection, remoteWorkspaceState, draw, inputBus]);
+  }, [connection, remoteWorkspaceState, drawOnRemote, inputBus]);
 
   useEffect(() => {
     connection.onclose(() => {
@@ -81,7 +81,7 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
       remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected);
     });
     connection.onreconnected(() => {
-      inputBus.subscribe(draw);
+      inputBus.subscribe(drawOnRemote);
       remoteWorkspaceState.setStatus(ConnectionStatus.Connected);
     });
     connection.onreconnecting(() => {
@@ -90,7 +90,7 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
     });
 
     connection.on('Draw', (figures: Line[]) => outputBus.publishChunk(figures));
-    connection.on('SetBackground', updateBackground);
+    connection.on('SetBackground', setBackground);
 
     return () => {
       connection.stop();
@@ -109,7 +109,7 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
     autorun(() => {
       const color = backgroundColor.value;
       if (connection.state === signalR.HubConnectionState.Connected) {
-        setBackground(color);
+        setBackgroundOnRemote(color);
       }
     })
   );
