@@ -35,7 +35,7 @@ const Whiteboard: React.FC<Props> = observer(({ inputBus, outputBus }) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
   const drawing = useRef<boolean>(false);
-  const currentPoint = useRef<Point>(new Point(0, 0));
+  const currentPoint = useRef<Point>({ X: 0, Y: 0 });
 
   const setupCanvasNode = useCallback((node) => setCanvas(node), []);
   const setupContainerNode = useCallback((node) => setContainer(node), []);
@@ -59,7 +59,12 @@ const Whiteboard: React.FC<Props> = observer(({ inputBus, outputBus }) => {
     (point: Point, stop: boolean) => {
       if (drawing.current && canvas && context) {
         const newPoint = fromClientToOffsetCoordinates(canvas, point);
-        const line = new Line(currentPoint.current, newPoint, penSize.value, penColor.value);
+        const line = {
+          From: currentPoint.current,
+          To: newPoint,
+          Width: penSize.value,
+          Color: penColor.value,
+        };
         drawLine(context, line);
         outputBus.publish(line);
 
@@ -100,14 +105,14 @@ const Whiteboard: React.FC<Props> = observer(({ inputBus, outputBus }) => {
       <Canvas
         ref={setupCanvasNode}
         style={{ backgroundColor: backgroundColor.value }}
-        onMouseDown={(e) => initDraw(new Point(e.clientX, e.clientY))}
-        onMouseMove={(e) => draw(new Point(e.clientX, e.clientY), false)}
-        onMouseUp={(e) => draw(new Point(e.clientX, e.clientY), true)}
-        onMouseOut={(e) => draw(new Point(e.clientX, e.clientY), true)}
-        onTouchStart={(e) => initDraw(new Point(e.touches[0].clientX, e.touches[0].clientY))}
-        onTouchMove={(e) => draw(new Point(e.touches[0].clientX, e.touches[0].clientY), false)}
-        onTouchEnd={(e) => draw(new Point(e.touches[0].clientX, e.touches[0].clientY), true)}
-        onTouchCancel={(e) => draw(new Point(e.touches[0].clientX, e.touches[0].clientY), true)}
+        onMouseDown={(e) => initDraw({ X: e.clientX, Y: e.clientY })}
+        onMouseMove={(e) => draw({ X: e.clientX, Y: e.clientY }, false)}
+        onMouseUp={(e) => draw({ X: e.clientX, Y: e.clientY }, true)}
+        onMouseOut={(e) => draw({ X: e.clientX, Y: e.clientY }, true)}
+        onTouchStart={(e) => initDraw({ X: e.touches[0].clientX, Y: e.touches[0].clientY })}
+        onTouchMove={(e) => draw({ X: e.touches[0].clientX, Y: e.touches[0].clientY }, false)}
+        onTouchEnd={(e) => draw({ X: e.touches[0].clientX, Y: e.touches[0].clientY }, true)}
+        onTouchCancel={(e) => draw({ X: e.touches[0].clientX, Y: e.touches[0].clientY }, true)}
       />
     </Container>
   );

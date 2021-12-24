@@ -15,7 +15,7 @@ type Props = {
   outputBus: MessageBus<Line>;
 };
 
-const RemoteWorkspace: React.FC<Props> = ({ backgroundColor }) => {
+const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus }) => {
   const { remoteWorkspaceState } = useRemoteWorkspaceStores();
 
   const connection = useMemo(
@@ -29,15 +29,14 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor }) => {
     []
   );
 
-  const startConnection = useCallback(async () => {
-    try {
-      remoteWorkspaceState.setStatus(ConnectionStatus.Connecting);
-      await connection.start();
-      remoteWorkspaceState.setStatus(ConnectionStatus.Connected);
-    } catch {
-      remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected);
-    }
-  }, [connection, remoteWorkspaceState]);
+  const draw = useCallback(
+    async (figures: Line[]) => {
+      try {
+        await connection.invoke('Draw', figures);
+      } catch {}
+    },
+    [connection]
+  );
 
   const setBackground = useCallback(
     async (color: string) => {
@@ -48,11 +47,32 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor }) => {
     [connection]
   );
 
-  useEffect(() => {
-    connection.onclose(() => remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected));
-    connection.onreconnected(() => remoteWorkspaceState.setStatus(ConnectionStatus.Connected));
-    connection.onreconnecting(() => remoteWorkspaceState.setStatus(ConnectionStatus.Connecting));
+  const startConnection = useCallback(async () => {
+    try {
+      remoteWorkspaceState.setStatus(ConnectionStatus.Connecting);
+      await connection.start();
+      inputBus.subscribe(draw);
+      remoteWorkspaceState.setStatus(ConnectionStatus.Connected);
+    } catch {
+      remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected);
+    }
+  }, [connection, remoteWorkspaceState, draw, inputBus]);
 
+  useEffect(() => {
+    connection.onclose(() => {
+      inputBus.unsubscribe();
+      remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected);
+    });
+    connection.onreconnected(() => {
+      inputBus.subscribe(draw);
+      remoteWorkspaceState.setStatus(ConnectionStatus.Connected);
+    });
+    connection.onreconnecting(() => {
+      inputBus.unsubscribe();
+      remoteWorkspaceState.setStatus(ConnectionStatus.Connecting);
+    });
+
+    connection.on('Draw', (figures: Line[]) => outputBus.publishChunk(figures));
     connection.on('SetBackground', (color: string) => backgroundColor.setValue(color));
 
     return () => {
