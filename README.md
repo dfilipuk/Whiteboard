@@ -14,6 +14,17 @@ Client is built using `React` and `MobX`. Server is built using `.NET`. `SignalR
 
 [VSCode devcontainers](https://code.visualstudio.com/docs/remote/containers) are configured for client and server for local development. You can build, run, debug client and server using devcontainer.
 
+#### Client
+
+- Open `client` folder as devcontainer in VSCode
+- Launch terminal and execute `cd source && yarn start`
+
+#### Server
+
+- Open `server` folder as devcontainer in VSCode
+- Open `Run and Debug` tab in VSCode
+- Select and start `.NET Core Launch (web)`
+
 ### Docker
 
 Use `docker-compose up` to build and run release version of the client and server.
