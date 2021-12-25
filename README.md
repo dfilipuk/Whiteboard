@@ -6,7 +6,7 @@ Online multi-user whiteboard. Multiple users can draw together on the same white
 
 Client-server architecture. Each client sends to server all its drawing actions. Server broadcasts drawing actions to all other clients in its turn. Each client also accepts and applies to its whiteboard all drawing actions received from the server.
 
-Client is built using `React` and `MobX`. Server is built using `.NET`. `SignalR` is used for real-time communication between clients and server. `SignalR` configured to use `WebSocket` as transport (with fallback to `Server-Sent Events` or `Long Polling` when `WebSocket` is not available) and `MessagePack` as data transfer protocol.
+Client is built using `React` and `MobX`. Server is built using `.NET`. `SignalR` is used for real-time communication between clients and server. `SignalR` configured to use `WebSocket` as transport and `MessagePack` as data transfer protocol. `Server-Sent Events` and `Long Polling` are fallback options when `WebSocket` is not available.
 
 ## Build and run
 
