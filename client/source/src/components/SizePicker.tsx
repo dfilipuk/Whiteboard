@@ -2,8 +2,6 @@ import React, { useCallback } from 'react';
 import Slider from 'rc-slider';
 import styled from 'styled-components';
 
-import { Size } from 'stores';
-
 import 'rc-slider/assets/index.css';
 
 const Container = styled.div`
@@ -13,25 +11,25 @@ const Container = styled.div`
 
 type Props = {
   className?: string;
-  size: Size;
+  initialSize: number;
   minSize: number;
   maxSize: number;
+  onChange: (size: number) => void;
 };
 
-const SizePicker: React.FC<Props> = ({ className, size, minSize, maxSize }) => {
+const SizePicker: React.FC<Props> = ({ className, initialSize, minSize, maxSize, onChange }) => {
   const SliderWithTooltip = Slider.createSliderWithTooltip(Slider);
 
   const formatTip = useCallback((value: number) => `${value}px`, []);
-  const updateValue = useCallback((value: number) => size.setValue(value), [size]);
 
   return (
     <Container className={className}>
       <SliderWithTooltip
         min={minSize}
         max={maxSize}
-        defaultValue={size.value}
+        defaultValue={initialSize}
         tipFormatter={formatTip}
-        onAfterChange={updateValue}
+        onAfterChange={onChange}
       />
     </Container>
   );

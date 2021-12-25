@@ -1,25 +1,23 @@
 import React, { useCallback, useState } from 'react';
-import { observer } from 'mobx-react-lite';
 import { ChromePicker, ColorResult } from 'react-color';
-
-import { Color } from 'stores';
 
 type Props = {
   className?: string;
-  color: Color;
+  initialColor: string;
+  onChange: (color: string) => void;
 };
 
-const ColorPicker: React.FC<Props> = observer(({ className, color }) => {
-  const [currentColor, setCurrentColor] = useState<string>(color.value);
+const ColorPicker: React.FC<Props> = ({ className, initialColor, onChange }) => {
+  const [currentColor, setCurrentColor] = useState<string>(initialColor);
 
   const updateColor = useCallback((newColor: ColorResult) => setCurrentColor(newColor.hex), []);
 
   const submitColor = useCallback(
     (newColor: ColorResult) => {
-      color.setValue(newColor.hex);
+      onChange(newColor.hex);
       setCurrentColor(newColor.hex);
     },
-    [color]
+    [onChange]
   );
 
   return (
@@ -30,6 +28,6 @@ const ColorPicker: React.FC<Props> = observer(({ className, color }) => {
       onChangeComplete={submitColor}
     />
   );
-});
+};
 
 export { ColorPicker };
