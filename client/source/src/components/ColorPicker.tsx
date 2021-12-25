@@ -14,8 +14,8 @@ const ColorPicker: React.FC<Props> = ({ className, initialColor, onChange }) => 
 
   const submitColor = useCallback(
     (newColor: ColorResult) => {
-      onChange(newColor.hex);
       setCurrentColor(newColor.hex);
+      onChange(newColor.hex);
     },
     [onChange]
   );
