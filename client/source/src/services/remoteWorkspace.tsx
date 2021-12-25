@@ -15,7 +15,7 @@ type Props = {
   outputBus: MessageBus<Line>;
 };
 
-const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus }) => {
+const RemoteWorkspace: React.FC<Props> = React.memo(({ backgroundColor, inputBus, outputBus }) => {
   const { remoteWorkspaceState } = useRemoteWorkspaceStores();
 
   const backgroundColorVersion = useRef<number>(0);
@@ -69,28 +69,36 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
     [connection, setBackground]
   );
 
+  const onConnect = useCallback(() => inputBus.subscribe(drawOnRemote), [inputBus, drawOnRemote]);
+
+  const onDisconnect = useCallback(() => {
+    inputBus.unsubscribe();
+    backgroundColorVersion.current = 0;
+    backgroundColorOnRemote.current = null;
+  }, [inputBus]);
+
   const connect = useCallback(async () => {
     try {
       remoteWorkspaceState.setStatus(ConnectionStatus.Connecting);
       await connection.start();
-      inputBus.subscribe(drawOnRemote);
+      onConnect();
       remoteWorkspaceState.setStatus(ConnectionStatus.Connected);
     } catch {
       remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected);
     }
-  }, [connection, remoteWorkspaceState, drawOnRemote, inputBus]);
+  }, [connection, remoteWorkspaceState, onConnect]);
 
   useEffect(() => {
     connection.onclose(() => {
-      inputBus.unsubscribe();
+      onDisconnect();
       remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected);
     });
     connection.onreconnected(() => {
-      inputBus.subscribe(drawOnRemote);
+      onConnect();
       remoteWorkspaceState.setStatus(ConnectionStatus.Connected);
     });
     connection.onreconnecting(() => {
-      inputBus.unsubscribe();
+      onDisconnect();
       remoteWorkspaceState.setStatus(ConnectionStatus.Connecting);
     });
 
@@ -123,6 +131,6 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
   );
 
   return <></>;
-};
+});
 
 export { RemoteWorkspace };

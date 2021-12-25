@@ -14,7 +14,7 @@ type Props = {
   onClick?: () => void;
 };
 
-const Button: React.FC<Props> = ({ className, icon, color, onClick }) => {
+const Button: React.FC<Props> = React.memo(({ className, icon, color, onClick }) => {
   return (
     <Element
       style={{ color }}
@@ -23,6 +23,6 @@ const Button: React.FC<Props> = ({ className, icon, color, onClick }) => {
       className={`${className} ${icon}`}
     />
   );
-};
+});
 
 export { Button };

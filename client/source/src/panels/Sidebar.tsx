@@ -77,6 +77,14 @@ const Sidebar: React.FC = observer(() => {
     () => togglePopUp(PopUpKind.BackgroundColor),
     [togglePopUp]
   );
+
+  const setPenSize = useCallback((size: number) => penSize.setValue(size), [penSize]);
+  const setPenColor = useCallback((color: string) => penColor.setValue(color), [penColor]);
+  const setBackgroundColor = useCallback(
+    (color: string) => backgroundColor.setValue(color),
+    [backgroundColor]
+  );
+
   const setFocusToSidebar = useCallback(
     (e: MouseEvent<HTMLDivElement>) => {
       if (e.target === e.currentTarget) {
@@ -119,17 +127,22 @@ const Sidebar: React.FC = observer(() => {
 
       {workspaceState.popUp === PopUpKind.PenColor && (
         <PopUp position={1}>
-          <StyledColorPicker color={penColor} />
+          <StyledColorPicker initialColor={penColor.value} onChange={setPenColor} />
         </PopUp>
       )}
       {workspaceState.popUp === PopUpKind.PenSize && (
         <PenSizePopUp position={2}>
-          <StyledSizePicker size={penSize} minSize={MIN_PEN_SIZE} maxSize={MAX_PEN_SIZE} />
+          <StyledSizePicker
+            initialSize={penSize.value}
+            minSize={MIN_PEN_SIZE}
+            maxSize={MAX_PEN_SIZE}
+            onChange={setPenSize}
+          />
         </PenSizePopUp>
       )}
       {workspaceState.popUp === PopUpKind.BackgroundColor && (
         <PopUp position={3}>
-          <StyledColorPicker color={backgroundColor} />
+          <StyledColorPicker initialColor={backgroundColor.value} onChange={setBackgroundColor} />
         </PopUp>
       )}
     </Container>

@@ -14,7 +14,7 @@ type Props = {
   outputBus: MessageBus<Line>;
 };
 
-const WorkspaceDebug: React.FC<Props> = ({ backgroundColor, inputBus, outputBus }) => {
+const WorkspaceDebug: React.FC<Props> = React.memo(({ backgroundColor, inputBus, outputBus }) => {
   const queryParams = useQueryParams();
 
   const penSize = useMemo((): number | undefined => {
@@ -47,6 +47,6 @@ const WorkspaceDebug: React.FC<Props> = ({ backgroundColor, inputBus, outputBus 
       backgroundColor={backgroundColor}
     />
   );
-};
+});
 
 export { WorkspaceDebug };

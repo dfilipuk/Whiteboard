@@ -22,13 +22,9 @@ type Props = {
   outputBus: MessageBus<Line>;
 };
 
-const Workspace: React.FC<Props> = ({
-  backgroundColor,
-  initialPenSize,
-  initialPenColor,
-  inputBus,
-  outputBus,
-}) => {
+const Workspace: React.FC<Props> = React.memo((props) => {
+  const { backgroundColor, initialPenSize, initialPenColor, inputBus, outputBus } = props;
+
   return (
     <WorkspaceStoresProvider
       initialPenSize={initialPenSize}
@@ -41,6 +37,6 @@ const Workspace: React.FC<Props> = ({
       </Container>
     </WorkspaceStoresProvider>
   );
-};
+});
 
 export { Workspace };
