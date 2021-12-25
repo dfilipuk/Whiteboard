@@ -7,7 +7,7 @@ type Props = {
   onChange: (color: string) => void;
 };
 
-const ColorPicker: React.FC<Props> = ({ className, initialColor, onChange }) => {
+const ColorPicker: React.FC<Props> = React.memo(({ className, initialColor, onChange }) => {
   const [currentColor, setCurrentColor] = useState<string>(initialColor);
 
   const updateColor = useCallback((newColor: ColorResult) => setCurrentColor(newColor.hex), []);
@@ -28,6 +28,6 @@ const ColorPicker: React.FC<Props> = ({ className, initialColor, onChange }) => 
       onChangeComplete={submitColor}
     />
   );
-};
+});
 
 export { ColorPicker };

@@ -17,9 +17,10 @@ type Props = {
   onChange: (size: number) => void;
 };
 
-const SizePicker: React.FC<Props> = ({ className, initialSize, minSize, maxSize, onChange }) => {
-  const SliderWithTooltip = Slider.createSliderWithTooltip(Slider);
+const SizePicker: React.FC<Props> = React.memo((props) => {
+  const { className, initialSize, minSize, maxSize, onChange } = props;
 
+  const SliderWithTooltip = Slider.createSliderWithTooltip(Slider);
   const formatTip = useCallback((value: number) => `${value}px`, []);
 
   return (
@@ -33,6 +34,6 @@ const SizePicker: React.FC<Props> = ({ className, initialSize, minSize, maxSize,
       />
     </Container>
   );
-};
+});
 
 export { SizePicker };

@@ -15,7 +15,7 @@ import { Color } from 'stores';
 
 import { WorkspaceDebug } from './WorkspaceDebug';
 
-const App: React.FC = () => {
+const App: React.FC = React.memo(() => {
   const [color] = useState<Color>(new Color(DEFAULT_BACKGROUND_COLOR));
 
   const [clientToServerBus] = useState<MessageBus<Line>>(
@@ -43,6 +43,6 @@ const App: React.FC = () => {
       </RemoteWorkspaceStoresProvider>
     </WindowEventsProvider>
   );
-};
+});
 
 export { App };

@@ -15,7 +15,7 @@ type Props = {
   outputBus: MessageBus<Line>;
 };
 
-const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus }) => {
+const RemoteWorkspace: React.FC<Props> = React.memo(({ backgroundColor, inputBus, outputBus }) => {
   const { remoteWorkspaceState } = useRemoteWorkspaceStores();
 
   const backgroundColorVersion = useRef<number>(0);
@@ -123,6 +123,6 @@ const RemoteWorkspace: React.FC<Props> = ({ backgroundColor, inputBus, outputBus
   );
 
   return <></>;
-};
+});
 
 export { RemoteWorkspace };
