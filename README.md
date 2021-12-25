@@ -26,7 +26,7 @@ Use `docker-compose up` to build and run release version of the client and serve
 ### Tips
 
 - Client uses `localhost` by default to access server. You can change it by setting server URL in `./client/source/src/constants/server.ts:SERVER_URL`
-- Initial drawing setting can be specified in query params for debug and testing purposes. For example `?color=blue&bgcolor=lime&size=15`
+- Initial drawing setting can be specified in query params. For example `?color=blue&bgcolor=lime&size=15`
   - `size` -- pen size
   - `color` -- pen color
   - `bgcolor` -- background color
