@@ -1,6 +1,6 @@
 {
   "name": "Whiteboard Server",
-  "image": "mcr.microsoft.com/vscode/devcontainers/dotnet:0-6.0",
+  "image": "mcr.microsoft.com/vscode/devcontainers/dotnet:6.0-bullseye",
   "workspaceFolder": "/whiteboard-server",
   "workspaceMount": "source=${localWorkspaceFolder},target=/whiteboard-server,type=bind,consistency=cached",	
   "mounts": [
