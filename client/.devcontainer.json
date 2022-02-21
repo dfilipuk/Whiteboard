@@ -1,6 +1,6 @@
 {
   "name": "Whiteboard Client",
-  "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:16",
+  "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:16-bullseye",
   "workspaceFolder": "/whiteboard-client",
   "postCreateCommand": "cd source && yarn",
   "workspaceMount": "source=${localWorkspaceFolder},target=/whiteboard-client,type=bind,consistency=cached",
@@ -8,7 +8,7 @@
     "source=whiteboard-client-node_modules,target=${containerWorkspaceFolder}/source/node_modules,type=volume"
   ],
   "containerEnv": {
-    "CHOKIDAR_USEPOLLING": "true"
+    "CHOKIDAR_USEPOLLING": "false"
   },
   "extensions": [
     "dbaeumer.vscode-eslint",
