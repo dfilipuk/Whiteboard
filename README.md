@@ -2,6 +2,8 @@
 
 Online multi-user whiteboard. Multiple users can draw together on the same whiteboard in real time.
 
+![Whiteboard demo](./Whiteboard.GIF)
+
 ## Technical details
 
 Client-server architecture. Each client sends to server all its drawing actions. Server broadcasts drawing actions to all other clients in its turn. Each client also accepts and applies to its whiteboard all drawing actions received from the server.
@@ -41,5 +43,3 @@ Use `docker-compose up` to build and run release version of the client and serve
   - `size` -- pen size
   - `color` -- pen color
   - `bgcolor` -- background color
-
-![Whiteboard demo](./Whiteboard.GIF)
