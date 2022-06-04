@@ -20,7 +20,7 @@ const useRemoteWorkspaceStores = (): RemoteWorkspaceStoresContext => {
   return context;
 };
 
-const RemoteWorkspaceStoresProvider: React.FC = ({ children }) => {
+const RemoteWorkspaceStoresProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [remoteWorkspaceState] = useState<RemoteWorkspaceState>(new RemoteWorkspaceState());
 
   const value: RemoteWorkspaceStoresContext = {
