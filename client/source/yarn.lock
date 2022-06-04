@@ -1382,23 +1382,23 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@microsoft/signalr-protocol-msgpack@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/signalr-protocol-msgpack/-/signalr-protocol-msgpack-6.0.1.tgz#f08c22f3f6c830531ddfed835025ee562f51e5b8"
-  integrity sha512-OvKqWh5nXrLD5SzPyUGgP2p1uLxGsBJNigaKBf2kuWdBUO3aN6qh6CFSAdWWUdoCugN4wucac0Zcr5JU5TRCyw==
+"@microsoft/signalr-protocol-msgpack@^6.0.5":
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@microsoft/signalr-protocol-msgpack/-/signalr-protocol-msgpack-6.0.5.tgz#2a8d72a94eb4741ee984d891637d6a256757f69e"
+  integrity sha512-zwQBZnGs+Y5sSi3dg+lfGiGNSZ1BOpm5fcgHJI5a1aZeZ4ZYxktOZY/FhNf6vGmdVxcfbqZ+3CwCtSOW2WkQ5Q==
   dependencies:
-    "@microsoft/signalr" ">=6.0.1"
+    "@microsoft/signalr" ">=6.0.5"
     "@msgpack/msgpack" "^2.7.0"
 
-"@microsoft/signalr@>=6.0.1", "@microsoft/signalr@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/signalr/-/signalr-6.0.1.tgz#89eeacabb558cfc90c546f8bf165ea34a1f91c28"
-  integrity sha512-witYtScUxPxl1QA69AsuVIsn54S4Rcfym3c/ON2bsA0ZWHcvskA0dUnOX9JCxOduGMEGwkMprKFfVTxUO/inzQ==
+"@microsoft/signalr@>=6.0.5", "@microsoft/signalr@^6.0.5":
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@microsoft/signalr/-/signalr-6.0.5.tgz#219f7fa10e94a75a841d3d7140d939fd2c2657e9"
+  integrity sha512-Y6Mny+z71wv2/FiuoqLcraojQRIbyeF/Ao4y+tcZK28JzGGieoulXBJIVQhoxzeM15Xe8xGOX0/5pVlOpwrI8Q==
   dependencies:
     abort-controller "^3.0.0"
     eventsource "^1.0.7"
     fetch-cookie "^0.11.0"
-    node-fetch "^2.6.1"
+    node-fetch "^2.6.7"
     ws "^7.4.5"
 
 "@msgpack/msgpack@^2.7.0":
@@ -7467,10 +7467,10 @@ no-case@^3.0.4:
     lower-case "^2.0.2"
     tslib "^2.0.3"
 
-node-fetch@^2.6.1:
-  version "2.6.6"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.6.tgz#1751a7c01834e8e1697758732e9efb6eeadfaf89"
-  integrity sha512-Z8/6vRlTUChSdIgMa51jxQ4lrw/Jy5SOW10ObaA47/RElsAN2c5Pn8bTgFGWn/ibwzXTE8qwr1Yzx28vsecXEA==
+node-fetch@^2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
   dependencies:
     whatwg-url "^5.0.0"
 
