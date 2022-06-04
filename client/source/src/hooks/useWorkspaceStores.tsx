@@ -24,6 +24,7 @@ type Props = {
   backgroundColor: Color;
   initialPenSize?: number;
   initialPenColor?: string;
+  children?: React.ReactNode;
 };
 
 const WorkspaceStoresProvider: React.FC<Props> = (props) => {
