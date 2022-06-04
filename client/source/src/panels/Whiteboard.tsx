@@ -37,8 +37,8 @@ const Whiteboard: React.FC<Props> = observer(({ inputBus, outputBus }) => {
   const drawing = useRef<boolean>(false);
   const currentPoint = useRef<Point>({ X: 0, Y: 0 });
 
-  const setupCanvasNode = useCallback((node) => setCanvas(node), []);
-  const setupContainerNode = useCallback((node) => setContainer(node), []);
+  const setupCanvasNode = useCallback((node: HTMLCanvasElement | null) => setCanvas(node), []);
+  const setupContainerNode = useCallback((node: HTMLDivElement | null) => setContainer(node), []);
 
   const setFocus = useCallback(
     () => workspaceState.setFocus(FocusTarget.Whiteboard),
