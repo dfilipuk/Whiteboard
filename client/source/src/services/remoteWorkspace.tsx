@@ -22,15 +22,15 @@ const RemoteWorkspace: React.FC<Props> = React.memo(({ backgroundColor, inputBus
 
   const backgroundColorVersion = useRef<number>(0);
   const backgroundColorOnRemote = useRef<string | null>(null);
+  const connection = useRef<signalR.HubConnection | null>(null);
 
-  const connection = useMemo(
+  const connectionBuilder = useMemo(
     () =>
       // https://docs.microsoft.com/en-us/aspnet/core/signalr/security?view=aspnetcore-6.0
       new signalR.HubConnectionBuilder()
         .withUrl(`${SERVER_URL}/hub/draw`, { withCredentials: false })
         .withHubProtocol(new MessagePackHubProtocol())
-        .withAutomaticReconnect()
-        .build(),
+        .withAutomaticReconnect(),
     []
   );
 
@@ -61,21 +61,26 @@ const RemoteWorkspace: React.FC<Props> = React.memo(({ backgroundColor, inputBus
     [backgroundColor]
   );
 
-  const drawOnRemote = useCallback(
-    async (figures: Line[]) => {
-      try {
-        console.debug(DEBUG_MESSAGE_PREFIX, 'drawOnRemote');
-        await connection.invoke('Draw', figures);
-      } catch {}
-    },
-    [connection]
-  );
+  const drawOnRemote = useCallback(async (figures: Line[]) => {
+    if (connection.current === null) {
+      return;
+    }
+
+    try {
+      console.debug(DEBUG_MESSAGE_PREFIX, 'drawOnRemote');
+      await connection.current.invoke('Draw', figures);
+    } catch {}
+  }, []);
 
   const setBackgroundOnRemote = useCallback(
     async (color: string) => {
+      if (connection.current === null) {
+        return;
+      }
+
       try {
         const versionBeforeCall = backgroundColorVersion.current;
-        const newVersion = await connection.invoke<number>('SetBackground', color);
+        const newVersion = await connection.current.invoke<number>('SetBackground', color);
 
         console.debug(
           DEBUG_MESSAGE_PREFIX,
@@ -94,7 +99,7 @@ const RemoteWorkspace: React.FC<Props> = React.memo(({ backgroundColor, inputBus
         }
       } catch {}
     },
-    [connection, setBackground]
+    [setBackground]
   );
 
   const onConnect = useCallback(() => {
@@ -110,41 +115,52 @@ const RemoteWorkspace: React.FC<Props> = React.memo(({ backgroundColor, inputBus
   }, [inputBus]);
 
   const connect = useCallback(async () => {
+    if (connection.current === null) {
+      return;
+    }
+
     try {
       console.debug(DEBUG_MESSAGE_PREFIX, 'start connection');
       remoteWorkspaceState.setStatus(ConnectionStatus.Connecting);
-      await connection.start();
+      await connection.current.start();
       onConnect();
       remoteWorkspaceState.setStatus(ConnectionStatus.Connected);
     } catch {
       remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected);
     }
-  }, [connection, remoteWorkspaceState, onConnect]);
+  }, [remoteWorkspaceState, onConnect]);
 
   useEffect(() => {
     console.debug(DEBUG_MESSAGE_PREFIX, 'initialize connection');
 
-    connection.onclose(() => {
+    const newConnection = connectionBuilder.build();
+
+    newConnection.onclose(() => {
       onDisconnect();
       remoteWorkspaceState.setStatus(ConnectionStatus.Disconnected);
     });
-    connection.onreconnected(() => {
+    newConnection.onreconnected(() => {
       onConnect();
       remoteWorkspaceState.setStatus(ConnectionStatus.Connected);
     });
-    connection.onreconnecting(() => {
+    newConnection.onreconnecting(() => {
       onDisconnect();
       remoteWorkspaceState.setStatus(ConnectionStatus.Connecting);
     });
 
-    connection.on('Draw', draw);
-    connection.on('SetBackground', setBackground);
+    newConnection.on('Draw', draw);
+    newConnection.on('SetBackground', setBackground);
+
+    connection.current = newConnection;
 
     return () => {
       console.debug(DEBUG_MESSAGE_PREFIX, 'stop connection');
-      connection.stop();
+      connection.current?.off('Draw', draw);
+      connection.current?.off('SetBackground', setBackground);
+      connection.current?.stop();
+      connection.current = null;
     };
-  });
+  }, [connectionBuilder, draw, setBackground, onConnect, onDisconnect, remoteWorkspaceState]);
 
   useEffect(() =>
     autorun(() => {
@@ -159,7 +175,7 @@ const RemoteWorkspace: React.FC<Props> = React.memo(({ backgroundColor, inputBus
       const color = backgroundColor.value;
       if (
         color !== backgroundColorOnRemote.current &&
-        connection.state === signalR.HubConnectionState.Connected
+        connection.current?.state === signalR.HubConnectionState.Connected
       ) {
         setBackgroundOnRemote(color);
       }
