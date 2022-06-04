@@ -20,18 +20,20 @@ type Props = {
 const SizePicker: React.FC<Props> = React.memo((props) => {
   const { className, initialSize, minSize, maxSize, onChange } = props;
 
-  const SliderWithTooltip = Slider.createSliderWithTooltip(Slider);
-  const formatTip = useCallback((value: number) => `${value}px`, []);
+  const onValueChange = useCallback(
+    (value: number | number[]) => {
+      if (Array.isArray(value)) {
+        onChange(value[value.length - 1]);
+      } else {
+        onChange(value);
+      }
+    },
+    [onChange]
+  );
 
   return (
     <Container className={className}>
-      <SliderWithTooltip
-        min={minSize}
-        max={maxSize}
-        defaultValue={initialSize}
-        tipFormatter={formatTip}
-        onAfterChange={onChange}
-      />
+      <Slider min={minSize} max={maxSize} defaultValue={initialSize} onChange={onValueChange} />
     </Container>
   );
 });
